@@ -1,15 +1,40 @@
 {
   "_note": "Effect sizes are game assumptions (ILLUSTRATIVE), not NASA figures; say so in the UI. Each effect multiplies an assumption read by js/sim/simulate.js.",
   "events": [
-    { "id": "solar-storm", "name": "Solar storm", "effect": { "solarScale": 0.9 },
-      "response": "Add array margin, or switch off an instrument to cut the load.", "provenance": "ILLUSTRATIVE" },
-    { "id": "battery-degraded", "name": "Battery ages faster than rated", "effect": { "batteryFadePerMonth": 2 },
-      "response": "Choose a larger battery, or a shorter-eclipse orbit.", "provenance": "ILLUSTRATIVE" },
-    { "id": "comms-outage", "name": "Intermittent communication link", "effect": { "contactScale": 0.5 },
-      "response": "Pick an orbit with more contact time, or a higher data-rate transponder.", "provenance": "ILLUSTRATIVE" },
-    { "id": "instrument-overdraw", "name": "Instrument draws more power than expected", "effect": { "loadScale": 1.15 },
-      "response": "Drop the most power-hungry instrument or add battery and array.", "provenance": "ILLUSTRATIVE" },
-    { "id": "extra-maneuver", "name": "Orbit entry needs extra delta-v", "effect": { "deltaVScale": 1.2 },
-      "response": "Carry more propellant, or choose an orbit that is cheaper to enter.", "provenance": "ILLUSTRATIVE" }
+    {
+      "id": "solar-storm",
+      "name": "Solar storm",
+      "effect": { "solarScale": 0.9 },
+      "response": "Add array margin, or switch off an instrument to cut the load.",
+      "provenance": "ILLUSTRATIVE"
+    },
+    {
+      "id": "battery-degraded",
+      "name": "Battery ages faster than rated",
+      "effect": { "batteryFadePerMonth": 2 },
+      "response": "Choose a larger battery, or a shorter-eclipse orbit.",
+      "provenance": "ILLUSTRATIVE"
+    },
+    {
+      "id": "comms-outage",
+      "name": "Intermittent communication link",
+      "effect": { "contactScale": 0.5 },
+      "response": "Pick an orbit with more contact time, or a higher data-rate transponder.",
+      "provenance": "ILLUSTRATIVE"
+    },
+    {
+      "id": "instrument-overdraw",
+      "name": "Instrument draws more power than expected",
+      "effect": { "loadScale": 1.15 },
+      "response": "Drop the most power-hungry instrument or add battery and array.",
+      "provenance": "ILLUSTRATIVE"
+    },
+    {
+      "id": "extra-maneuver",
+      "name": "Orbit entry needs extra delta-v",
+      "effect": { "deltaVScale": 1.2 },
+      "response": "Carry more propellant, or choose an orbit that is cheaper to enter.",
+      "provenance": "ILLUSTRATIVE"
+    }
   ]
 }

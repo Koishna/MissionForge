@@ -1,0 +1,120 @@
+:root {
+  --bg: #f6f7f9;
+  --surface: #fff;
+  --text: #16202b;
+  --muted: #5b6b7b;
+  --line: #d6dde5;
+  --accent: #1f5fbf;
+  --measured: #1b7f4b;
+  --published: #1f5fbf;
+  --tool: #7a3fb0;
+  --illustrative: #b26a00;
+  --bad: #b3261e;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #10161d;
+    --surface: #18212b;
+    --text: #e8edf2;
+    --muted: #9aa9b8;
+    --line: #2b3947;
+    --accent: #6fa3f5;
+    --measured: #5fcf93;
+    --published: #6fa3f5;
+    --tool: #c39af0;
+    --illustrative: #f0b45a;
+    --bad: #ff8a80;
+  }
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  font:
+    16px/1.5 system-ui,
+    -apple-system,
+    "Segoe UI",
+    sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+.top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.75rem 1.25rem;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+.top h1 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+nav a {
+  padding: 0.35rem 0.7rem;
+  border-radius: 6px;
+  color: var(--muted);
+  text-decoration: none;
+}
+nav a.active {
+  background: var(--accent);
+  color: #fff;
+}
+#app {
+  max-width: 1000px;
+  margin: 1.25rem auto;
+  padding: 0 1.25rem;
+}
+.foot {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 0 1.25rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+button {
+  font: inherit;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+}
+button:focus-visible,
+nav a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+.badge {
+  display: inline-block;
+  padding: 0 0.4rem;
+  margin-left: 0.35rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  border: 1px solid currentColor;
+}
+.badge.MEASURED {
+  color: var(--measured);
+}
+.badge.PUBLISHED {
+  color: var(--published);
+}
+.badge.TOOL {
+  color: var(--tool);
+}
+.badge.ILLUSTRATIVE {
+  color: var(--illustrative);
+}
+.badge.CALCULATED {
+  color: var(--tool);
+}
