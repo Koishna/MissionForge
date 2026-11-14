@@ -1,0 +1,429 @@
+{
+  "components": [
+    {
+      "id": "bus-small",
+      "name": "Small bus (structure + harness)",
+      "category": "bus",
+      "mass_kg": {
+        "value": 80,
+        "unit": "kg",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "power_w": {
+        "value": 20,
+        "unit": "W",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "cost_usd_m": {
+        "value": 20,
+        "unit": "M USD",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      }
+    },
+    {
+      "id": "solar-300",
+      "name": "Solar array 300 W",
+      "category": "power",
+      "mass_kg": {
+        "value": 15,
+        "unit": "kg",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "power_generated_w": {
+        "value": 300,
+        "unit": "W",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "cost_usd_m": {
+        "value": 5,
+        "unit": "M USD",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      }
+    },
+    {
+      "id": "battery-small",
+      "name": "Battery 100 Wh",
+      "category": "battery",
+      "mass_kg": {
+        "value": 8,
+        "unit": "kg",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "capacity_wh": {
+        "value": 100,
+        "unit": "Wh",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "cost_usd_m": {
+        "value": 2,
+        "unit": "M USD",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      }
+    },
+    {
+      "id": "battery-large",
+      "name": "Battery 200 Wh",
+      "category": "battery",
+      "mass_kg": {
+        "value": 14,
+        "unit": "kg",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "capacity_wh": {
+        "value": 200,
+        "unit": "Wh",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "cost_usd_m": {
+        "value": 4,
+        "unit": "M USD",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      }
+    },
+    {
+      "id": "comms-xband",
+      "name": "X-band transponder",
+      "category": "comms",
+      "mass_kg": {
+        "value": 6,
+        "unit": "kg",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "power_w": {
+        "value": 25,
+        "unit": "W",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "downlink_kbps": {
+        "value": 2000,
+        "unit": "kbit/s",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "cost_usd_m": {
+        "value": 4,
+        "unit": "M USD",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "rf_power_w": {
+        "value": 10,
+        "unit": "W",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "antenna_gain_dbi": {
+        "value": 25,
+        "unit": "dBi",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "frequency_mhz": {
+        "value": 8450,
+        "unit": "MHz",
+        "provenance": "PUBLISHED",
+        "source": "TODO: cite the deep-space X-band downlink allocation (ITU / NASA) with date accessed"
+      }
+    },
+    {
+      "id": "computer-basic",
+      "name": "Flight computer",
+      "category": "computer",
+      "mass_kg": {
+        "value": 3,
+        "unit": "kg",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "power_w": {
+        "value": 8,
+        "unit": "W",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "cost_usd_m": {
+        "value": 3,
+        "unit": "M USD",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      }
+    },
+    {
+      "id": "pointing-basic",
+      "name": "Reaction wheels + star tracker",
+      "category": "pointing",
+      "mass_kg": {
+        "value": 5,
+        "unit": "kg",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "power_w": {
+        "value": 10,
+        "unit": "W",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "cost_usd_m": {
+        "value": 3,
+        "unit": "M USD",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      }
+    },
+    {
+      "id": "prop-biprop",
+      "name": "Bipropellant stage",
+      "category": "propulsion",
+      "mass_kg": {
+        "value": 30,
+        "unit": "kg",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "power_w": {
+        "value": 5,
+        "unit": "W",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "propellant_kg": {
+        "value": 90,
+        "unit": "kg",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "isp_s": {
+        "value": 300,
+        "unit": "s",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "cost_usd_m": {
+        "value": 6,
+        "unit": "M USD",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      }
+    },
+    {
+      "id": "comms-sband",
+      "name": "S-band transmitter (low rate)",
+      "category": "comms",
+      "mass_kg": {
+        "value": 3,
+        "unit": "kg",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "power_w": {
+        "value": 12,
+        "unit": "W",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "downlink_kbps": {
+        "value": 256,
+        "unit": "kbps",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "rf_power_w": {
+        "value": 5,
+        "unit": "W",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "antenna_gain_dbi": {
+        "value": 8,
+        "unit": "dBi",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "frequency_mhz": {
+        "value": 2250,
+        "unit": "MHz",
+        "provenance": "PUBLISHED",
+        "source": "TODO: cite the S-band downlink allocation with date accessed"
+      },
+      "cost_usd_m": {
+        "value": 2,
+        "unit": "M USD",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      }
+    },
+    {
+      "id": "prop-monoprop",
+      "name": "Monopropellant thruster",
+      "category": "propulsion",
+      "mass_kg": {
+        "value": 22,
+        "unit": "kg",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "power_w": {
+        "value": 4,
+        "unit": "W",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "propellant_kg": {
+        "value": 60,
+        "unit": "kg",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "isp_s": {
+        "value": 220,
+        "unit": "s",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "cost_usd_m": {
+        "value": 4,
+        "unit": "M USD",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      }
+    }
+  ],
+  "instruments": [
+    {
+      "id": "camera",
+      "name": "Narrow-angle camera",
+      "mass_kg": {
+        "value": 12,
+        "unit": "kg",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "power_w": {
+        "value": 30,
+        "unit": "W",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "data_rate_kbps": {
+        "value": 500,
+        "unit": "kbit/s",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "cost_usd_m": {
+        "value": 12,
+        "unit": "M USD",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "science_value": 3
+    },
+    {
+      "id": "spectrometer",
+      "name": "Neutron spectrometer",
+      "mass_kg": {
+        "value": 8,
+        "unit": "kg",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "power_w": {
+        "value": 20,
+        "unit": "W",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "data_rate_kbps": {
+        "value": 100,
+        "unit": "kbit/s",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "cost_usd_m": {
+        "value": 10,
+        "unit": "M USD",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "science_value": 3
+    },
+    {
+      "id": "radar",
+      "name": "Imaging radar",
+      "mass_kg": {
+        "value": 25,
+        "unit": "kg",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "power_w": {
+        "value": 220,
+        "unit": "W",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "data_rate_kbps": {
+        "value": 3000,
+        "unit": "kbit/s",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "cost_usd_m": {
+        "value": 25,
+        "unit": "M USD",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "science_value": 5
+    }
+  ],
+  "launchers": [
+    {
+      "id": "launch-small",
+      "name": "Small launcher",
+      "capacity_kg": {
+        "value": 300,
+        "unit": "kg",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "cost_usd_m": {
+        "value": 40,
+        "unit": "M USD",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      }
+    },
+    {
+      "id": "launch-medium",
+      "name": "Medium launcher",
+      "capacity_kg": {
+        "value": 800,
+        "unit": "kg",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "cost_usd_m": {
+        "value": 70,
+        "unit": "M USD",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      }
+    }
+  ]
+}
