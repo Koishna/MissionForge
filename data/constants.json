@@ -1,0 +1,20 @@
+{
+  "mu_moon": {
+    "value": 4.90e12,
+    "unit": "m^3/s^2",
+    "provenance": "PUBLISHED",
+    "source": "NASA NSSDCA Moon Fact Sheet: GM = 0.00490 x 10^6 km^3/s^2 (3 significant figures). https://nssdc.gsfc.nasa.gov/planetary/factsheet/moonfact.html (page last updated 11 Jan 2024; retrieved 14 Nov 2026, re-check on the live page)"
+  },
+  "r_moon": {
+    "value": 1737400.0,
+    "unit": "m",
+    "provenance": "PUBLISHED",
+    "source": "NASA NSSDCA Moon Fact Sheet: volumetric mean radius 1737.4 km. https://nssdc.gsfc.nasa.gov/planetary/factsheet/moonfact.html (page last updated 11 Jan 2024; retrieved 14 Nov 2026, re-check on the live page)"
+  },
+  "solar_irradiance_w_m2": {
+    "value": 1361.0,
+    "unit": "W/m^2",
+    "provenance": "PUBLISHED",
+    "source": "NASA NSSDCA Moon Fact Sheet: solar irradiance 1361.0 W/m^2 at the Moon's orbital distance. https://nssdc.gsfc.nasa.gov/planetary/factsheet/moonfact.html (retrieved 14 Nov 2026, re-check on the live page)"
+  }
+}

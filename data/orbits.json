@@ -1,0 +1,208 @@
+{
+  "orbits": [
+    {
+      "id": "llo-100-polar",
+      "name": "Low circular polar (100 km)",
+      "blurb": "Close to the surface: sharper detail, a short orbit, and the longest shadow time per orbit of the three.",
+      "perilune_alt_km": {
+        "value": 100,
+        "unit": "km",
+        "provenance": "ILLUSTRATIVE",
+        "source": "Game design choice (altitude), not a measurement."
+      },
+      "apolune_alt_km": {
+        "value": 100,
+        "unit": "km",
+        "provenance": "ILLUSTRATIVE",
+        "source": "Game design choice (altitude), not a measurement."
+      },
+      "contact_h_per_day": {
+        "value": 4,
+        "unit": "h",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: no source found yet. Replace with a published figure or keep ILLUSTRATIVE."
+      },
+      "insertion_dv_ms": {
+        "value": 900,
+        "unit": "m/s",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: no source found yet. Replace with a published figure or keep ILLUSTRATIVE."
+      },
+      "period_s": {
+        "value": 7069,
+        "unit": "s",
+        "provenance": "CALCULATED",
+        "source": "Calculated by js/sim/orbital.js from data/constants.json: two-body orbit, cylindrical Moon shadow, Sun in the orbit plane (beta = 0), worst orientation. Conservative; cross-check with GMAT."
+      },
+      "eclipse_fraction": {
+        "value": 0.3944,
+        "unit": "fraction",
+        "provenance": "CALCULATED",
+        "source": "Calculated by js/sim/orbital.js from data/constants.json: two-body orbit, cylindrical Moon shadow, Sun in the orbit plane (beta = 0), worst orientation. Conservative; cross-check with GMAT."
+      },
+      "eclipse_by_beta": {
+        "value": [
+          0.3944,
+          0.3942,
+          0.3928,
+          0.3906,
+          0.3875,
+          0.3831,
+          0.3775,
+          0.37,
+          0.3603,
+          0.3478,
+          0.3311,
+          0.3081,
+          0.2744,
+          0.2203,
+          0.0997,
+          0,
+          0,
+          0,
+          0
+        ],
+        "unit": "fraction",
+        "step_deg": 5,
+        "provenance": "CALCULATED",
+        "source": "Calculated by js/sim/orbital.js: eclipse share for Sun-to-orbit-plane angle beta = 0 to 90 deg in 5 deg steps. Assumes a polar orbit fixed in space, apsides over the poles, Moon axis perpendicular to the ecliptic. Cross-check with GMAT."
+      }
+    },
+    {
+      "id": "llo-500-polar",
+      "name": "Higher circular polar (500 km)",
+      "blurb": "Farther out: coarser detail and a longer orbit, but a smaller share of each orbit spent in shadow.",
+      "perilune_alt_km": {
+        "value": 500,
+        "unit": "km",
+        "provenance": "ILLUSTRATIVE",
+        "source": "Game design choice (altitude), not a measurement."
+      },
+      "apolune_alt_km": {
+        "value": 500,
+        "unit": "km",
+        "provenance": "ILLUSTRATIVE",
+        "source": "Game design choice (altitude), not a measurement."
+      },
+      "contact_h_per_day": {
+        "value": 5,
+        "unit": "h",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: no source found yet. Replace with a published figure or keep ILLUSTRATIVE."
+      },
+      "insertion_dv_ms": {
+        "value": 800,
+        "unit": "m/s",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: no source found yet. Replace with a published figure or keep ILLUSTRATIVE."
+      },
+      "period_s": {
+        "value": 9499,
+        "unit": "s",
+        "provenance": "CALCULATED",
+        "source": "Calculated by js/sim/orbital.js from data/constants.json: two-body orbit, cylindrical Moon shadow, Sun in the orbit plane (beta = 0), worst orientation. Conservative; cross-check with GMAT."
+      },
+      "eclipse_fraction": {
+        "value": 0.2828,
+        "unit": "fraction",
+        "provenance": "CALCULATED",
+        "source": "Calculated by js/sim/orbital.js from data/constants.json: two-body orbit, cylindrical Moon shadow, Sun in the orbit plane (beta = 0), worst orientation. Conservative; cross-check with GMAT."
+      },
+      "eclipse_by_beta": {
+        "value": [
+          0.2831,
+          0.2819,
+          0.2789,
+          0.2739,
+          0.2661,
+          0.2553,
+          0.2406,
+          0.2206,
+          0.1925,
+          0.15,
+          0.0633,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "unit": "fraction",
+        "step_deg": 5,
+        "provenance": "CALCULATED",
+        "source": "Calculated by js/sim/orbital.js: eclipse share for Sun-to-orbit-plane angle beta = 0 to 90 deg in 5 deg steps. Assumes a polar orbit fixed in space, apsides over the poles, Moon axis perpendicular to the ecliptic. Cross-check with GMAT."
+      }
+    },
+    {
+      "id": "elliptical-frozen",
+      "name": "Elliptical polar (30 x 216 km)",
+      "blurb": "Low at one end and high at the other, the orbit LRO used for commissioning and possibly its extended mission.",
+      "perilune_alt_km": {
+        "value": 30,
+        "unit": "km",
+        "provenance": "PUBLISHED",
+        "source": "NASA PDS LRO instrument-host catalogue (pre-launch description): a 30 x 216 km elliptical, lower-maintenance orbit for commissioning and possibly the extended mission. https://pds.nasa.gov/data/pds3/releases/backup/2016/201604.lrolola/insthost.cat"
+      },
+      "apolune_alt_km": {
+        "value": 216,
+        "unit": "km",
+        "provenance": "PUBLISHED",
+        "source": "NASA PDS LRO instrument-host catalogue (pre-launch description): a 30 x 216 km elliptical, lower-maintenance orbit for commissioning and possibly the extended mission. https://pds.nasa.gov/data/pds3/releases/backup/2016/201604.lrolola/insthost.cat"
+      },
+      "contact_h_per_day": {
+        "value": 8,
+        "unit": "h",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: no source found yet. Replace with a published figure or keep ILLUSTRATIVE."
+      },
+      "insertion_dv_ms": {
+        "value": 700,
+        "unit": "m/s",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: no source found yet. Replace with a published figure or keep ILLUSTRATIVE."
+      },
+      "period_s": {
+        "value": 7203,
+        "unit": "s",
+        "provenance": "CALCULATED",
+        "source": "Calculated by js/sim/orbital.js from data/constants.json: two-body orbit, cylindrical Moon shadow, Sun in the orbit plane (beta = 0), worst orientation. Conservative; cross-check with GMAT."
+      },
+      "eclipse_fraction": {
+        "value": 0.3999,
+        "unit": "fraction",
+        "provenance": "CALCULATED",
+        "source": "Calculated by js/sim/orbital.js from data/constants.json: two-body orbit, cylindrical Moon shadow, Sun in the orbit plane (beta = 0), worst orientation. Conservative; cross-check with GMAT."
+      },
+      "eclipse_by_beta": {
+        "value": [
+          0.3916,
+          0.3912,
+          0.3899,
+          0.3876,
+          0.3844,
+          0.38,
+          0.3741,
+          0.3665,
+          0.3569,
+          0.344,
+          0.3271,
+          0.3039,
+          0.2703,
+          0.2167,
+          0.1013,
+          0,
+          0,
+          0,
+          0
+        ],
+        "unit": "fraction",
+        "step_deg": 5,
+        "provenance": "CALCULATED",
+        "source": "Calculated by js/sim/orbital.js: eclipse share for Sun-to-orbit-plane angle beta = 0 to 90 deg in 5 deg steps. Assumes a polar orbit fixed in space, apsides over the poles, Moon axis perpendicular to the ecliptic. Cross-check with GMAT."
+      }
+    }
+  ]
+}
