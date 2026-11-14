@@ -16,3 +16,4 @@ export function propellantNeededKg(r, dvMs) {
   if (!prop) return Infinity;
   return dryMassKg(r) * (Math.exp(dvMs / (val(prop.isp_s) * G0)) - 1);
 }
+
