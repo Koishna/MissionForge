@@ -1,4 +1,3 @@
-// This compares the players design with real ones
 import { val } from "../core/units.js";
 
 const ratio = (a, b) => (a > 0 && b > 0 ? a / b : null);
@@ -22,17 +21,21 @@ export function closestMission(design, missionsFile) {
     };
   });
   rows.sort((x, y) => x.distance - y.distance);
-  const best = rows[0] || null;
-  const close =
-    best !== null &&
-    best.ratios.mass !== null &&
-    best.ratios.mass <= CLOSE_FACTOR &&
-    best.ratios.mass >= 1 / CLOSE_FACTOR;
+
+  const massOk = (r) =>
+    r.ratios.mass !== null &&
+    r.ratios.mass <= CLOSE_FACTOR &&
+    r.ratios.mass >= 1 / CLOSE_FACTOR;
+  const matches = rows.filter(massOk);
+  const best = matches[0] || rows[0] || null;
+  const close = matches.length > 0;
   const times = (r) => (r === null ? "n/a" : `${r.toFixed(2)}x`);
   const text = !best
     ? "No real missions to compare with."
     : close
       ? `Most like ${best.name}. Compared with it: mass ${times(best.ratios.mass)}, orbit altitude ${times(best.ratios.alt)}, lifetime ${times(best.ratios.life)}, instruments ${times(best.ratios.inst)}.`
-      : `No close real mission. The nearest in our small table is ${best.name}, but your dry mass is ${times(best.ratios.mass)} of its mass.`;
+      : best.ratios.mass === null
+        ? `No close real mission. The nearest in our small table is ${best.name}, but its dry mass is not in our data.`
+        : `No close real mission. The nearest in our small table is ${best.name}, but your dry mass is ${times(best.ratios.mass)} of its mass.`;
   return { best, close, ranked: rows, text };
 }
