@@ -1,6 +1,6 @@
 {
   "mu_moon": {
-    "value": 4.90e12,
+    "value": 4.9e12,
     "unit": "m^3/s^2",
     "provenance": "PUBLISHED",
     "source": "NASA NSSDCA Moon Fact Sheet: GM = 0.00490 x 10^6 km^3/s^2 (3 significant figures). https://nssdc.gsfc.nasa.gov/planetary/factsheet/moonfact.html (page last updated 11 Jan 2024; retrieved 14 Nov 2026, re-check on the live page)"
