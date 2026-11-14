@@ -1,0 +1,57 @@
+{
+  "_note": "Real lunar orbiters for the 'your design most resembles...' comparison. Only figures copied from a cited NASA source are stored. Entries that say 'confirm' must be checked against the NASA PDF before the demo.",
+  "real_missions": [
+    {
+      "id": "lro",
+      "name": "Lunar Reconnaissance Orbiter (LRO)",
+      "agency": "NASA",
+      "launch_year": 2009,
+      "launch_mass_kg": {
+        "value": 1916,
+        "unit": "kg",
+        "provenance": "PUBLISHED",
+        "source": "NASA LRO/LCROSS Press Kit, June 2009 (archived copy: https://webarchive.library.unt.edu/web/20090922191046/http:/lro.gsfc.nasa.gov/images/LRO_LCROSS_presskit.pdf). Figures read from Spaceflight Now's reproduction of the press kit text (https://spaceflightnow.com/atlas/av020/090610lro.html) because the PDF itself could not be opened; confirm against the PDF page before the demo. Launch mass 1,916 kg."
+      },
+      "dry_mass_kg": {
+        "value": 1018,
+        "unit": "kg",
+        "provenance": "PUBLISHED",
+        "source": "NASA LRO/LCROSS Press Kit, June 2009 (archived copy: https://webarchive.library.unt.edu/web/20090922191046/http:/lro.gsfc.nasa.gov/images/LRO_LCROSS_presskit.pdf). Figures read from Spaceflight Now's reproduction of the press kit text (https://spaceflightnow.com/atlas/av020/090610lro.html) because the PDF itself could not be opened; confirm against the PDF page before the demo. Dry mass 1,018 kg."
+      },
+      "payload_mass_kg": {
+        "value": 92.6,
+        "unit": "kg",
+        "provenance": "ILLUSTRATIVE",
+        "source": "Not in the NASA text I could open. 92.6 kg is from the Wikipedia infobox; replace with the sum of the press-kit instrument masses or delete before the demo."
+      },
+      "orbit": {
+        "value": "Polar, about 50 km altitude (base mission); later 30 x 216 km",
+        "provenance": "PUBLISHED",
+        "source": "NASA NSSDCA LRO record and NAIF LRO SPICE catalog (insthost.cat): base mission 50 +/- 20 km, 30 x 216 km low-maintenance orbit for commissioning and extended mission."
+      },
+      "primary_lifetime_months": {
+        "value": 12,
+        "unit": "months",
+        "provenance": "PUBLISHED",
+        "source": "NASA NSSDCA LRO record: one-year base mission in a polar orbit."
+      },
+      "instruments": [
+        "LROC camera",
+        "LOLA laser altimeter",
+        "LEND neutron detector",
+        "LAMP ultraviolet spectrograph",
+        "Diviner radiometer",
+        "CRaTER",
+        "Mini-RF radar"
+      ],
+      "instruments_source": "NASA LRO/LCROSS Press Kit, June 2009 lists LROC, LOLA, LEND, LAMP, Diviner, CRaTER and Mini-RF (instrument list also in NASA-sourced pages; confirm names in the PDF).",
+      "mission_orbit_alt_km": {
+        "value": 50,
+        "unit": "km",
+        "provenance": "PUBLISHED",
+        "source": "NAIF LRO SPICE catalog (insthost.cat): base mission altitude 50 +/- 20 km. https://naif.jpl.nasa.gov/pub/naif/pds/data/lro-l-spice-6-v1.0/lrosp_1000/catalog/insthost.cat"
+      }
+    }
+  ],
+  "todo_more_missions": "Add 3 to 4 more orbiters (for example Lunar Prospector, Chandrayaan-2 orbiter, KPLO/Danuri) only after copying mass, orbit, lifetime and instruments from a NASA, ISRO or KARI page. Not stored from memory."
+}

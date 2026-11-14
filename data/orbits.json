@@ -23,10 +23,10 @@
         "source": "TODO: no source found yet. Replace with a published figure or keep ILLUSTRATIVE."
       },
       "insertion_dv_ms": {
-        "value": 900,
+        "value": 898.5,
         "unit": "m/s",
-        "provenance": "ILLUSTRATIVE",
-        "source": "TODO: no source found yet. Replace with a published figure or keep ILLUSTRATIVE."
+        "provenance": "PUBLISHED",
+        "source": "Lunar Prospector insertion into a 100 km circular lunar orbit, 898.5 m/s, quoted in D. Folta, 'Lunar Reconnaissance Observer DV Budget Estimate', NASA GSFC Code 595, 2 April 2004. Excludes stationkeeping and launch-error correction. A different spacecraft and a minimum-energy transfer, so treat as representative, not exact."
       },
       "period_s": {
         "value": 7069,
