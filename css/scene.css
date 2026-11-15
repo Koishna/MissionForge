@@ -1,0 +1,337 @@
+.scene {
+  --sc-ok: #5fcf93;
+  --sc-warn: #f0b45a;
+  --sc-bad: #ff8a80;
+  --sc-speed: 1;
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #070b16;
+  border: 1px solid var(--line);
+}
+.scene svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.sc-bg {
+  fill: #070b16;
+}
+.sc-stars circle {
+  fill: #e8edf2;
+}
+.sc-world {
+  transition: filter 0.2s;
+}
+
+.sc-rocket,
+.sc-craft,
+.sc-orbiter,
+.sc-ring,
+.sc-link,
+.sc-trail,
+.sc-guide,
+.sc-beam,
+.sc-storm,
+.sc-halo,
+.sc-pulse,
+.sc-flame {
+  opacity: 0;
+}
+
+.sc-rocket {
+  transition: opacity 0.3s;
+}
+.sc-rbody {
+  fill: #e8edf2;
+}
+.sc-fin {
+  fill: #9aa9b8;
+}
+.sc-flame {
+  fill: #ffb454;
+}
+
+.sc-body {
+  fill: #dfe6ee;
+}
+.sc-panel {
+  fill: #5b8bd6;
+}
+.sc-dish {
+  fill: #9aa9b8;
+}
+
+.sc-guide {
+  fill: none;
+  stroke: #9aa9b8;
+  stroke-width: 1;
+  stroke-dasharray: 2 6;
+}
+.sc-trail {
+  fill: none;
+  stroke: #6fa3f5;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+.sc-ring {
+  fill: none;
+  stroke: #6fa3f5;
+  stroke-width: 1;
+  stroke-dasharray: 3 5;
+}
+.sc-link {
+  stroke: var(--sc-ok);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 5;
+}
+.sc-beam {
+  stroke: #8fe0ff;
+  stroke-width: 2;
+}
+.sc-halo {
+  fill: none;
+  stroke: var(--sc-ok);
+  stroke-width: 3;
+}
+.sc-pulse {
+  fill: none;
+  stroke: #8fe0ff;
+  stroke-width: 2;
+  transform-origin: 650px 110px;
+}
+.sc-storm line {
+  stroke: var(--sc-warn);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 18 40;
+}
+.sc-frame {
+  fill: none;
+  stroke: transparent;
+  stroke-width: 4;
+}
+
+.scene[data-stage="pad"] .sc-rocket,
+.scene[data-stage="launch"] .sc-rocket {
+  opacity: 1;
+}
+.scene[data-stage="launch"] .sc-flame {
+  opacity: 1;
+}
+
+.scene[data-stage="transit"] .sc-craft {
+  opacity: 1;
+}
+.scene[data-stage="transit"] .sc-trail,
+.scene[data-stage="orbit"] .sc-trail {
+  opacity: 0.8;
+}
+.scene[data-stage="transit"] .sc-guide,
+.scene[data-stage="launch"] .sc-guide {
+  opacity: 0.55;
+}
+.scene[data-stage="transit"] .sc-link,
+.scene[data-stage="orbit"] .sc-link {
+  opacity: 0.9;
+}
+.scene[data-stage="orbit"] .sc-orbiter,
+.scene[data-stage="orbit"] .sc-ring,
+.scene[data-state="insertion"] .sc-ring {
+  opacity: 1;
+}
+
+.scene[data-stage="launch"] .sc-rocket {
+  transform: translate(10px, -112px) scale(0.55);
+}
+
+.sc-orbiter {
+  transform-origin: 650px 110px;
+}
+
+.scene-caption {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0.9rem;
+  background: #0d1424;
+  color: #e8edf2;
+  border-top: 1px solid #1d2a3c;
+  font-size: 0.95rem;
+}
+.scene-dot {
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 50%;
+  background: var(--sc-ok);
+  flex: none;
+}
+
+.scene[data-state="storm"] .sc-storm {
+  opacity: 1;
+}
+.scene[data-state="storm"] .sc-sun {
+  opacity: 1;
+}
+.scene[data-state="storm"] .sc-frame,
+.scene[data-state="warning"] .sc-frame {
+  stroke: var(--sc-warn);
+}
+.scene[data-state="storm"] .sc-body,
+.scene[data-state="warning"] .sc-body {
+  fill: var(--sc-warn);
+}
+.scene[data-state="storm"] .scene-dot,
+.scene[data-state="warning"] .scene-dot {
+  background: var(--sc-warn);
+}
+
+.scene[data-state="comms-lost"] .sc-link {
+  stroke: var(--sc-bad);
+  opacity: 1;
+}
+.scene[data-state="comms-lost"] .sc-frame {
+  stroke: var(--sc-bad);
+}
+.scene[data-state="comms-lost"] .scene-dot {
+  background: var(--sc-bad);
+}
+
+.scene[data-state="science"] .sc-beam {
+  opacity: 1;
+}
+.scene[data-state="science"] .sc-pulse {
+  opacity: 0.6;
+}
+
+.scene[data-state="success"] .sc-halo {
+  opacity: 1;
+}
+.scene[data-state="success"] .sc-frame {
+  stroke: var(--sc-ok);
+}
+
+.scene[data-state="failure"] {
+  --sc-speed: 0.25;
+}
+.scene[data-state="failure"] .sc-world {
+  filter: saturate(0.3) brightness(0.8);
+}
+.scene[data-state="failure"] .sc-frame {
+  stroke: var(--sc-bad);
+}
+.scene[data-state="failure"] .scene-dot {
+  background: var(--sc-bad);
+}
+.scene[data-state="failure"] .sc-link {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .scene[data-stage="launch"] .sc-rocket {
+    animation: sc-rise calc(2.6s / var(--sc-speed))
+      cubic-bezier(0.5, 0, 0.9, 0.6) forwards;
+  }
+  @keyframes sc-rise {
+    from {
+      transform: translate(0, 0) scale(1);
+    }
+    to {
+      transform: translate(10px, -112px) scale(0.55);
+    }
+  }
+  .sc-flame {
+    animation: sc-flicker 0.12s alternate infinite;
+    transform-origin: 0 0;
+  }
+  @keyframes sc-flicker {
+    from {
+      transform: scaleY(0.7);
+    }
+    to {
+      transform: scaleY(1.15);
+    }
+  }
+
+  .scene[data-stage="orbit"] .sc-orbiter {
+    animation: sc-orbit calc(16s / var(--sc-speed)) linear infinite;
+  }
+  @keyframes sc-orbit {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .scene[data-state="storm"] .sc-storm line {
+    animation: sc-streak 1.1s linear infinite;
+  }
+  .scene[data-state="storm"] .sc-storm line:nth-child(2n) {
+    animation-duration: 0.8s;
+  }
+  @keyframes sc-streak {
+    to {
+      stroke-dashoffset: -116;
+    }
+  }
+  .scene[data-state="storm"] .sc-frame,
+  .scene[data-state="warning"] .sc-frame {
+    animation: sc-blink 1s ease-in-out infinite alternate;
+  }
+  @keyframes sc-blink {
+    from {
+      stroke-opacity: 0.25;
+    }
+    to {
+      stroke-opacity: 1;
+    }
+  }
+
+  .scene[data-state="comms-lost"] .sc-link {
+    animation: sc-flicker-line 0.7s steps(2, jump-none) infinite;
+  }
+  @keyframes sc-flicker-line {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.2;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  .scene[data-state="science"] .sc-pulse {
+    animation: sc-ping 1.8s ease-out infinite;
+  }
+  @keyframes sc-ping {
+    from {
+      transform: scale(1);
+      opacity: 0.7;
+    }
+    to {
+      transform: scale(1.7);
+      opacity: 0;
+    }
+  }
+
+  .sc-world {
+    transition:
+      transform 3.2s ease-in-out,
+      filter 2.2s ease-out;
+    transform-origin: 650px 110px;
+  }
+  .scene[data-state="success"] .sc-world {
+    transform: scale(1.45);
+  }
+  .scene[data-state="failure"] .sc-world {
+    transition-duration: 4s;
+  }
+}
+
+@media (max-width: 560px) {
+  .scene-caption {
+    font-size: 0.85rem;
+  }
+}
