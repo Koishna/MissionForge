@@ -1,0 +1,55 @@
+{
+  "_note": "Thresholds live here, not in code. Every rule must pass (AND). metric names: costUsdM, massMarginFrac (spare mass share, 0.2 = 80% of launcher capacity used), linkMarginDb, dataGb, survivedEvents, reliability (Monte Carlo success rate 0..1). requireSuccess: the run must have succeeded.",
+  "provenance": "ILLUSTRATIVE",
+  "source": "MissionForge team game design; thresholds are game goals, not real-mission figures.",
+  "achievements": [
+    {
+      "id": "first_contact",
+      "name": "First Contact",
+      "icon": "SIG",
+      "description": "The link works and the mission succeeds.",
+      "requireSuccess": true,
+      "rules": [{ "metric": "linkMarginDb", "op": ">=", "value": 0 }]
+    },
+    {
+      "id": "budget_master",
+      "name": "Budget Master",
+      "icon": "USD",
+      "description": "Succeed with a total cost under 100 M USD.",
+      "requireSuccess": true,
+      "rules": [{ "metric": "costUsdM", "op": "<", "value": 100 }]
+    },
+    {
+      "id": "lightweight",
+      "name": "Lightweight",
+      "icon": "KG",
+      "description": "Succeed using under 80% of the launcher capacity.",
+      "requireSuccess": true,
+      "rules": [{ "metric": "massMarginFrac", "op": ">", "value": 0.2 }]
+    },
+    {
+      "id": "science_machine",
+      "name": "Science Machine",
+      "icon": "GB",
+      "description": "Get 300 GB or more of data to the ground.",
+      "requireSuccess": true,
+      "rules": [{ "metric": "dataGb", "op": ">=", "value": 300 }]
+    },
+    {
+      "id": "survivor",
+      "name": "Survivor",
+      "icon": "EVT",
+      "description": "Survive 3 or more critical events.",
+      "requireSuccess": true,
+      "rules": [{ "metric": "survivedEvents", "op": ">=", "value": 3 }]
+    },
+    {
+      "id": "perfect_mission",
+      "name": "Perfect Mission",
+      "icon": "TOP",
+      "description": "All requirements met and reliability above 90%.",
+      "requireSuccess": true,
+      "rules": [{ "metric": "reliability", "op": ">", "value": 0.9 }]
+    }
+  ]
+}
