@@ -6,6 +6,7 @@ import {
 } from "../core/resources.js";
 import { runMonteCarlo } from "../uncertainty/monteCarlo.js";
 import { badge } from "./badge.js";
+import { gaugeHtml } from "./gauge.js";
 
 const RUNS = 1000,
   SEED = 42;
@@ -53,7 +54,8 @@ function show(mc) {
     .sort((a, b) => b[1] - a[1])
     .map(([why, n]) => `<li>${why} (${n} trials)</li>`)
     .join("");
-  return `<p><strong>${pct(mc.successRate)}</strong> of ${mc.runs} trials succeeded.
+  return `${gaugeHtml({ value: mc.successRate, low: mc.ci95[0], high: mc.ci95[1], label: `Simulated success (${mc.runs} trials)` })}
+    <p>${mc.runs - failed} of ${mc.runs} trials succeeded.
       We are 95% confident the true rate under these assumptions is between ${pct(mc.ci95[0])} and ${pct(mc.ci95[1])}.</p>
     <p>${failed} trials failed.</p>
     ${causes ? `<p>Why they failed:</p><ul>${causes}</ul>` : "<p>No trial failed.</p>"}
