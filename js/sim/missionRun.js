@@ -31,7 +31,6 @@ export function createMissionRun({
   const decisionHistory = [];
   const criticalEvents = [];
   const survivedEvents = [];
-  const beats = [];
 
   let metSeconds = 0;
 
@@ -58,9 +57,9 @@ export function createMissionRun({
 
     const batteryCapacity = Number(battery.capacity_wh) || 0;
     const eclipseFraction = Number(orbit.eclipse_fraction) || 0;
+    const periodS = Number(orbit.period_s) || 0;
 
-    const eclipseDemand =
-      (load * eclipseFraction * (Number(orbit.period_s) || 0)) / 3600;
+    const eclipseDemand = (load * eclipseFraction * periodS) / 3600;
 
     const batteryFade = Number(assumptions.batteryFadePerMonth) || 0;
 
@@ -81,6 +80,7 @@ export function createMissionRun({
       requiredDv > 0 ? (availableDv - requiredDv) / requiredDv : Infinity;
 
     const dataRate = Number(communications.data_rate_kbps) || 0;
+
     const downlinkRate = Number(communications.downlink_rate_kbps) || 0;
 
     const contactHours =
@@ -150,19 +150,29 @@ export function createMissionRun({
       minBatteryWh: minBattery,
       minBatteryFrac,
       reserveAtEclipseEntry: agedBattery,
-      depletedAtS: minBattery <= 0 ? Number(orbit.period_s) || 0 : null,
+      depletedAtS: minBattery <= 0 ? periodS : null,
       generatedGb: dataGenerated,
       dataDownlinkedGb,
       eclipseDemandWh: eclipseDemand,
-      eclipseMin: (eclipseFraction * (Number(orbit.period_s) || 0)) / 60,
-      eclipseMinShortest:
-        (eclipseFraction * (Number(orbit.period_s) || 0)) / 60,
-      periodS: Number(orbit.period_s) || 0,
+      eclipseMin: (eclipseFraction * periodS) / 60,
+      eclipseMinShortest: (eclipseFraction * periodS) / 60,
+      periodS,
       dvAvailMs: availableDv,
       dvNeedMs: requiredDv,
       dvMarginFrac,
       timeline: [],
     };
+  }
+
+  function simpleSimulationWithAssumptions(nextAssumptions) {
+    const previous = assumptions;
+
+    try {
+      assumptions = nextAssumptions;
+      return simpleSimulation();
+    } finally {
+      assumptions = previous;
+    }
   }
 
   function getPhaseId() {
@@ -185,16 +195,19 @@ export function createMissionRun({
 
   function rollPhaseEvent(phase) {
     const candidates = getPhaseEvents(phase);
+    const triggered = [];
 
     for (const event of candidates) {
-      const chance = Number(event.chance ?? 0);
+      const chance = Math.max(0, Math.min(1, Number(event.chance) || 0));
 
-      if (rng() < chance) {
-        return event;
+      const roll = rng();
+
+      if (roll < chance) {
+        triggered.push(event);
       }
     }
 
-    return null;
+    return triggered[0] || null;
   }
 
   function calculateSimulation() {
@@ -210,7 +223,7 @@ export function createMissionRun({
 
     const dv = Math.max(0, Math.min(100, ((sim.dvMarginFrac ?? 0) + 1) * 50));
 
-    const dataRequired = mission.requirements?.min_data_gb || 0;
+    const dataRequired = mission?.requirements?.min_data_gb || 0;
 
     const dataHealth =
       dataRequired > 0
@@ -260,6 +273,25 @@ export function createMissionRun({
     return "LOW";
   }
 
+  function updateEventClassification(eventId, recovered) {
+    const survivedIndex = survivedEvents.indexOf(eventId);
+    const criticalIndex = criticalEvents.indexOf(eventId);
+
+    if (survivedIndex !== -1) {
+      survivedEvents.splice(survivedIndex, 1);
+    }
+
+    if (criticalIndex !== -1) {
+      criticalEvents.splice(criticalIndex, 1);
+    }
+
+    if (recovered) {
+      survivedEvents.push(eventId);
+    } else {
+      criticalEvents.push(eventId);
+    }
+  }
+
   function createPhaseBeat(phase) {
     const sim = calculateSimulation();
 
@@ -268,7 +300,7 @@ export function createMissionRun({
       kind: "phase",
       phaseId: phase.id,
       metSeconds,
-      severity: "info",
+      severity: sim.success ? "info" : "warning",
       title: phase.name,
       text: phase.description || `Mission phase: ${phase.name}.`,
       healthDelta: {
@@ -279,7 +311,7 @@ export function createMissionRun({
         science: 0,
       },
       decision: null,
-      outcome: sim.success ? "ok" : "recovered",
+      outcome: sim.success ? "ok" : "at-risk",
     };
   }
 
@@ -294,6 +326,8 @@ export function createMissionRun({
       : simulateNominal(r, mission, eventAssumptions);
 
     const healthAfter = calculateHealth(simAfter, eventAssumptions);
+
+    assumptions = eventAssumptions;
 
     const healthDelta = {
       power: healthAfter.power - healthBefore.power,
@@ -322,27 +356,14 @@ export function createMissionRun({
             options: decision.options || [],
           }
         : null,
-      outcome: simAfter.success ? "ok" : "recovered",
+      outcome: decision ? "pending" : simAfter.success ? "recovered" : "lost",
     };
 
-    if (simAfter.success) {
-      survivedEvents.push(event.id);
-    } else {
-      criticalEvents.push(event.id);
+    if (!decision) {
+      updateEventClassification(event.id, simAfter.success);
     }
 
     return phaseEvent;
-  }
-
-  function simpleSimulationWithAssumptions(nextAssumptions) {
-    const previous = assumptions;
-
-    try {
-      assumptions = nextAssumptions;
-      return simpleSimulation();
-    } finally {
-      assumptions = previous;
-    }
   }
 
   function createResultBeat() {
@@ -382,30 +403,23 @@ export function createMissionRun({
         finished = true;
 
         const beat = createResultBeat();
-        beats.push(beat);
-
         return beat;
       }
 
       metSeconds = Number(currentPhase.startSeconds ?? 0);
 
-      const beat = createPhaseBeat(currentPhase);
-      beats.push(beat);
-
-      return beat;
+      return createPhaseBeat(currentPhase);
     }
 
     if (!phaseEvent) {
-      phaseEvent = rollPhaseEvent(currentPhase);
+      const selectedEvent = rollPhaseEvent(currentPhase);
 
-      if (phaseEvent) {
-        const beat = createEventBeat(phaseEvent);
+      if (selectedEvent) {
+        const beat = createEventBeat(selectedEvent);
 
         if (beat.decision) {
           pendingDecision = beat.decision;
         }
-
-        beats.push(beat);
 
         return beat;
       }
@@ -442,6 +456,14 @@ export function createMissionRun({
       optionId,
     });
 
+    const simAfterDecision = calculateSimulation();
+
+    if (phaseEvent) {
+      phaseEvent.outcome = simAfterDecision.success ? "recovered" : "lost";
+
+      updateEventClassification(phaseEvent.eventId, simAfterDecision.success);
+    }
+
     pendingDecision = null;
 
     return {
@@ -454,6 +476,26 @@ export function createMissionRun({
     };
   }
 
+  function previewNextBeat() {
+    if (pendingDecision) {
+      return "Decision required";
+    }
+
+    if (!currentPhase) {
+      const nextPhase = phases[phaseIndex];
+
+      return nextPhase ? `Next phase: ${nextPhase.name}` : "Mission result";
+    }
+
+    if (!phaseEvent) {
+      return `Event check: ${currentPhase.name}`;
+    }
+
+    const nextPhase = phases[phaseIndex + 1];
+
+    return nextPhase ? `Next phase: ${nextPhase.name}` : "Mission result";
+  }
+
   function snapshot() {
     const sim = calculateSimulation();
 
@@ -463,11 +505,7 @@ export function createMissionRun({
       metSeconds,
       health: calculateHealth(sim),
       riskLevel: calculateRisk(sim),
-      nextBeatPreview: pendingDecision
-        ? "Decision required"
-        : currentPhase
-          ? `Continue ${currentPhase.name}`
-          : "Next phase",
+      nextBeatPreview: previewNextBeat(),
       pendingDecision,
     };
   }
@@ -475,11 +513,8 @@ export function createMissionRun({
   function result() {
     const sim = calculateSimulation();
 
-    let primaryCode = null;
-
-    if (sim.codes && sim.codes.length) {
-      primaryCode = sim.codes[0];
-    }
+    const codes = sim.codes || [];
+    const primaryCode = codes.length ? codes[0] : null;
 
     return {
       success: sim.success,
@@ -488,6 +523,8 @@ export function createMissionRun({
       decisions: [...decisionHistory],
       margins: {
         batteryReserveFrac: sim.minBatteryFrac ?? 0,
+        batteryReserveWh: sim.minBatteryWh ?? 0,
+        reserveAtEclipseEntryWh: sim.reserveAtEclipseEntry ?? 0,
         dvMarginFrac: sim.dvMarginFrac ?? 0,
         linkMarginDb: null,
         dataGb: sim.dataDownlinkedGb ?? 0,
@@ -498,12 +535,17 @@ export function createMissionRun({
         ? null
         : {
             primaryCode,
-            contributingCodes: sim.codes?.slice(1) || [],
+            contributingCodes: codes.slice(1),
             numbers: {
               minBatteryFrac: sim.minBatteryFrac ?? 0,
+              minBatteryWh: sim.minBatteryWh ?? 0,
+              reserveAtEclipseEntryWh: sim.reserveAtEclipseEntry ?? 0,
               dvMarginFrac: sim.dvMarginFrac ?? 0,
+              dvAvailableMs: sim.dvAvailMs ?? 0,
+              dvRequiredMs: sim.dvNeedMs ?? 0,
               dataDownlinkedGb: sim.dataDownlinkedGb ?? 0,
-              depletedAtS: sim.depletedAtS,
+              generatedGb: sim.generatedGb ?? 0,
+              depletedAtS: sim.depletedAtS ?? null,
             },
           },
     };

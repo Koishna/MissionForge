@@ -27,23 +27,18 @@ function makeDesign() {
       contact_h_per_day: 8,
       eclipse_by_beta: null,
     },
-
     battery: {
       capacity_wh: 5000,
     },
-
     power: {
       generation_w: 500,
       consumption_w: 250,
     },
-
     instruments: [],
-
     communications: {
       data_rate_kbps: 10,
       downlink_rate_kbps: 20,
     },
-
     propulsion: {
       delta_v_ms: 2000,
     },
@@ -55,6 +50,62 @@ function makeMission() {
     requirements: {
       lifetime_months: 1,
       min_data_gb: 0.01,
+    },
+  };
+}
+
+function makeDecisionData() {
+  return {
+    phases: {
+      phases: [
+        {
+          id: "transfer",
+          name: "Transfer",
+          order: 1,
+          startSeconds: 0,
+        },
+      ],
+    },
+    events: {
+      events: [
+        {
+          id: "solar-storm",
+          name: "Solar storm",
+          phase: "transfer",
+          chance: 1,
+          severity: "high",
+          effect: {
+            solarScale: 0.9,
+          },
+        },
+      ],
+    },
+    decisions: {
+      decisions: [
+        {
+          id: "solar-storm-response",
+          triggerEvent: "solar-storm",
+          prompt: "How should the mission respond?",
+          options: [
+            {
+              id: "safe-mode",
+              label: "Enter Safe Mode",
+              effect: {
+                loadScale: 0.8,
+                scienceScale: 0.5,
+              },
+            },
+            {
+              id: "continue-science",
+              label: "Continue Science",
+              effect: {
+                loadScale: 1.1,
+                scienceScale: 1,
+              },
+            },
+          ],
+        },
+      ],
     },
   };
 }
@@ -92,6 +143,42 @@ function runMission(data, seed, r = makeDesign()) {
   };
 }
 
+function runMissionWithChoices(data, seed) {
+  const run = createMissionRun({
+    r: makeDesign(),
+    mission: makeMission(),
+    data,
+    seed,
+    phaseDeg: 0,
+  });
+
+  const beats = [];
+
+  for (let i = 0; i < 50; i++) {
+    const beat = run.step();
+
+    if (beat) {
+      beats.push(beat);
+    }
+
+    const pending = run.snapshot().pendingDecision;
+
+    if (pending) {
+      run.choose(pending.id, pending.options[0].id);
+      continue;
+    }
+
+    if (beat?.kind === "result") {
+      break;
+    }
+  }
+
+  return {
+    run,
+    beats,
+  };
+}
+
 export async function runMissionRunTests(data) {
   const results = [];
 
@@ -101,7 +188,6 @@ export async function runMissionRunTests(data) {
       const second = runMission(data, 42);
 
       const firstIds = first.beats.map((beat) => beat.id);
-
       const secondIds = second.beats.map((beat) => beat.id);
 
       return JSON.stringify(firstIds) === JSON.stringify(secondIds);
@@ -192,6 +278,61 @@ export async function runMissionRunTests(data) {
       const second = runMission(data, 12345);
 
       return JSON.stringify(first.beats) === JSON.stringify(second.beats);
+    }),
+  );
+
+  results.push(
+    makeResult("Event effects persist after a decision", () => {
+      const testData = makeDecisionData();
+
+      const { run } = runMission(testData, 42);
+
+      run.step();
+      const eventBeat = run.step();
+
+      if (eventBeat?.kind !== "event") {
+        return false;
+      }
+
+      const choice = run.choose("solar-storm-response", "safe-mode");
+
+      return (
+        choice.assumptions.solarScale === 0.9 &&
+        choice.assumptions.loadScale === 0.8 &&
+        choice.assumptions.scienceScale === 0.5
+      );
+    }),
+  );
+
+  results.push(
+    makeResult("Decision effects are applied to the simulation", () => {
+      const testData = makeDecisionData();
+
+      const { run } = runMission(testData, 42);
+
+      run.step();
+      run.step();
+
+      const choice = run.choose("solar-storm-response", "continue-science");
+
+      return (
+        choice.assumptions.solarScale === 0.9 &&
+        choice.assumptions.loadScale === 1.1 &&
+        choice.assumptions.scienceScale === 1
+      );
+    }),
+  );
+
+  results.push(
+    makeResult("Mission outcome is deterministic after decisions", () => {
+      const first = runMissionWithChoices(data, 12345);
+      const second = runMissionWithChoices(data, 12345);
+
+      return (
+        JSON.stringify(first.beats) === JSON.stringify(second.beats) &&
+        JSON.stringify(first.run.result()) ===
+          JSON.stringify(second.run.result())
+      );
     }),
   );
 

@@ -41,21 +41,29 @@
         {
           "id": "reduce-contact-demand",
           "label": "Prioritize Essential Communications",
-          "pros": ["Reduces the impact of the degraded link"],
-          "cons": ["Less science data is successfully delivered"],
+          "pros": [
+            "Improves communication capacity",
+            "Allows more data to reach the ground"
+          ],
+          "cons": ["Reduces science data generation"],
           "effect": {
             "contactScale": 0.75,
-            "downlinkScale": 0.8
+            "downlinkScale": 1.1,
+            "scienceScale": 0.7
           }
         },
         {
           "id": "maintain-operations",
-          "label": "Maintain Full Operations",
-          "pros": ["Keeps normal science operations active"],
-          "cons": ["Communication shortfall remains more likely"],
+          "label": "Maintain Full Science Operations",
+          "pros": ["Preserves normal science output"],
+          "cons": [
+            "Less communication time is available",
+            "Higher risk of data shortfall"
+          ],
           "effect": {
             "contactScale": 0.5,
-            "downlinkScale": 1
+            "downlinkScale": 1,
+            "scienceScale": 1
           }
         }
       ]
@@ -69,18 +77,23 @@
           "id": "conservative-correction",
           "label": "Use a Conservative Correction",
           "pros": ["Reduces the additional maneuver requirement"],
-          "cons": ["Leaves less margin for later maneuvers"],
+          "cons": ["Delays science operations", "Reduces science output"],
           "effect": {
-            "deltaVScale": 1.1
+            "deltaVScale": 1.1,
+            "scienceScale": 0.75
           }
         },
         {
           "id": "full-correction",
           "label": "Perform the Full Correction",
-          "pros": ["Maximizes the chance of reaching the planned orbit"],
-          "cons": ["Consumes more delta-v"],
+          "pros": ["Preserves the planned science schedule"],
+          "cons": [
+            "Requires more delta-v",
+            "Increases propulsion failure risk"
+          ],
           "effect": {
-            "deltaVScale": 1.25
+            "deltaVScale": 1.25,
+            "scienceScale": 1
           }
         }
       ]
