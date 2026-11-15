@@ -778,12 +778,31 @@
   line-height: 1.4;
 }
 
-.chip.pro { color: var(--ok); border-color: var(--ok); }
-.chip.con { color: var(--low); border-color: var(--low); }
+.chip.pro {
+   color: var(--ok); border-color: var(--ok);
+   }
 
-/* Dashboard status levels (OK / LOW / CRITICAL): colour plus a word. */
-.resource-status.low { color: var(--low); }
-.system-status.low { color: var(--low); }
-.system-status.low .status-dot { background: var(--low); box-shadow: 0 0 9px var(--low); }
-.system-status.critical { color: var(--critical); }
-.system-status.critical .status-dot { background: var(--critical); box-shadow: 0 0 9px var(--critical); }
+   .chip.con { color: var(--low); border-color: var(--low); }
+
+
+.resource-status.low { 
+  color: var(--low);
+ }
+
+.system-status.low {
+   color: var(--low);
+   }
+
+.system-status.low .status-dot {
+   background: var(--low);
+    box-shadow: 0 0 9px var(--low); 
+  }
+
+.system-status.critical { 
+  color: var(--critical);
+ }
+
+ .system-status.critical .status-dot {
+   background: var(--critical);
+    box-shadow: 0 0 9px var(--critical); 
+  }
