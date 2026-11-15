@@ -33,6 +33,7 @@ const PHASE_STATE = {
   separation: "launch",
   transfer: "transfer",
   insertion: "insertion",
+  "orbit-insertion": "insertion",
   science: "science",
 };
 
