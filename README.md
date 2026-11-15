@@ -188,11 +188,9 @@ You do not need to install dependencies or run a build command. However, the app
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/MissionForge.git
+git clone https://github.com/Koishna/MissionForge.git
 cd MissionForge
 ```
-
-Replace `YOUR-USERNAME` with the repository owner's GitHub username.
 
 ### 2. Start a local server
 
