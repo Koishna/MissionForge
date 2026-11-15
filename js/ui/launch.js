@@ -13,7 +13,11 @@ import { validateSpacecraft } from "../core/validate.js";
 import { deltaVms } from "../core/propulsion.js";
 import { linkMarginDb } from "../core/comms.js";
 import { runMonteCarlo } from "../uncertainty/monteCarlo.js";
-import { createScene, destroyScene } from "./scene.js";
+import { createScene, destroyScene, showBeat } from "./scene.js";
+import { setState } from "../state.js";
+import { renderEventLog } from "./eventLog.js";
+import { renderDecisionCard } from "./decisionCard.js";
+import { formatMet } from "./hud.js";
 
 const PREVIEW_RUNS = 200;
 
@@ -132,7 +136,7 @@ const STATUS_TEXT = {
   unknown: "Not set",
 };
 
-let activeScene = null;
+let active = null;
 
 function summaryHtml(rep) {
   return `<dl class="launch-rows">${rep.rows
@@ -164,78 +168,168 @@ function oddsHtml(mc) {
   </div>`;
 }
 
+function stopPlayback() {
+  if (!active) return;
+  clearTimeout(active.timer);
+  if (active.run && !active.done) setState({ run: null });
+  destroyScene(active.scene);
+  active = null;
+}
+function flightMarkup() {
+  return `<div class="panel launch launch-flight"><h2>Mission in progress</h2><div class="launch-hud panel" id="flight-hud"></div><div id="launch-flight-scene"></div><div class="launch-flight-grid"><section><h3>Mission events</h3><div id="flight-log"></div></section><section><h3>Mission decision</h3><div id="flight-decision"></div></section></div><p class="launch-actions"><button id="flight-pause" type="button">Pause</button><button id="flight-speed" class="secondary" type="button" aria-pressed="false">Speed x2</button><button id="flight-skip" class="secondary" type="button">Skip beat</button></p><p id="flight-status" role="status" aria-live="polite"></p></div>`;
+}
+function scheduleBeat(delay = 1700) {
+  if (!active || active.paused || active.waiting || active.done) return;
+  clearTimeout(active.timer);
+  active.timer = setTimeout(advanceBeat, active.double ? delay / 2 : delay);
+}
+function advanceBeat() {
+  const flight = active;
+  if (!flight || flight.paused || flight.waiting || flight.done) return;
+  const beat = flight.run.step();
+  if (!beat) {
+    finishFlight(flight);
+    return;
+  }
+  flight.beats.push(beat);
+  showBeat(flight.scene, beat);
+  flight.renderHud(
+    document.getElementById("flight-hud"),
+    flight.run.snapshot(),
+  );
+  renderEventLog(
+    document.getElementById("flight-log"),
+    flight.beats,
+    formatMet,
+  );
+  const status = document.getElementById("flight-status");
+  if (status) status.textContent = `${beat.title}. ${beat.text}`;
+  if (beat.decision?.options?.length) {
+    flight.waiting = true;
+    renderDecisionCard(
+      document.getElementById("flight-decision"),
+      beat.decision,
+      (_, optionId) => {
+        if (active !== flight) return;
+        try {
+          flight.run.choose(beat.decision.id, optionId);
+          flight.waiting = false;
+          document.getElementById("flight-decision").replaceChildren();
+          flight.renderHud(
+            document.getElementById("flight-hud"),
+            flight.run.snapshot(),
+          );
+          scheduleBeat();
+        } catch (error) {
+          document.getElementById("flight-status").textContent = error.message;
+        }
+      },
+    );
+    return;
+  }
+  scheduleBeat();
+}
+function finishFlight(flight) {
+  if (active !== flight || flight.done) return;
+  flight.done = true;
+  clearTimeout(flight.timer);
+  const outcome = flight.run.result();
+  setState({ run: null, results: { ...(state.results || {}), outcome } });
+  const status = document.getElementById("flight-status");
+  if (status)
+    status.textContent = outcome.success
+      ? "Mission complete."
+      : "Mission failed.";
+  const actions = document.querySelector(".launch-flight .launch-actions");
+  if (actions)
+    actions.innerHTML =
+      '<a href="#report"><button type="button">See results</button></a>';
+}
 export function renderLaunch(app, state) {
+  stopPlayback();
   ensureCss("css/scene.css");
   ensureCss("css/launch.css");
-  if (activeScene) {
-    destroyScene(activeScene);
-    activeScene = null;
-  }
-
+  ensureCss("css/hud.css");
   const r = resolveSpacecraft(state.spacecraft, state.data);
   const validation = validateSpacecraft(r, state.mission);
   const rep = preflightReport(r, state.mission, validation);
   const seed = state.seed ?? 42;
-
   app.innerHTML = `
-    <div class="panel launch">
-      <h2>Ready to launch?</h2>
-      <p>Your spacecraft flies to the Moon and the mission plays out one step at a time.
-         Events can happen on the way, and some will ask you to decide.</p>
-      <div id="launch-scene"></div>
-    </div>
-    <div class="panel launch">
-      <h2>Pre-flight check</h2>
-      ${rep.missing.length ? `<p class="warn">Your design is not ready. Add ${esc(rep.missing.join(", "))} in the designer first.</p>` : ""}
-      ${summaryHtml(rep)}
-      <div id="launch-odds" aria-live="polite"></div>
-      ${
-        rep.ready && rep.warnings.length
-          ? `
-        <div class="launch-issues">
-          <p><strong>The system check found ${rep.warnings.length === 1 ? "a problem" : rep.warnings.length + " problems"}:</strong></p>
-          <ul>${rep.warnings.map((w) => `<li>${esc(w)}</li>`).join("")}</ul>
-          <p>You can still launch. The mission will probably fail, and the report will show why.</p>
-        </div>`
-          : ""
-      }
-      ${
-        rep.ready && !rep.warnings.length && rep.cautions.length
-          ? `
-        <ul class="launch-cautions">${rep.cautions.map((w) => `<li>${esc(w)}</li>`).join("")}</ul>`
-          : ""
-      }
-      <p class="launch-actions">
-        <button id="launch-go" ${rep.ready ? "" : "disabled"}>${rep.ready && rep.warnings.length ? "Launch anyway" : "Launch mission"}</button>
-        <a href="#designer"><button type="button" class="secondary">Back to the designer</button></a>
-      </p>
-      <p id="launch-note" class="launch-note" role="status"></p>
-    </div>`;
-
-  activeScene = createScene(app.querySelector("#launch-scene"));
-
-  if (rep.ready) {
-    const mc = runMonteCarlo(
-      r,
-      state.mission,
-      state.data.uncertainty,
-      PREVIEW_RUNS,
-      seed,
+  <div class="panel launch"><h2>Ready to launch?</h2><p>Your spacecraft flies to the Moon and the mission plays out one step at a time. Events can happen on the way, and some will ask you to decide.</p><div id="launch-scene"></div></div>
+  <div class="panel launch"><h2>Pre-flight check</h2>
+   ${rep.missing.length ? `<p class="warn">Your design is not ready. Add ${esc(rep.missing.join(", "))} in the designer first.</p>` : ""}
+   ${summaryHtml(rep)}<div id="launch-odds" aria-live="polite"></div>
+   ${rep.ready && rep.warnings.length ? `<div class="launch-issues"><p><strong>The system check found ${rep.warnings.length} problem${rep.warnings.length === 1 ? "" : "s"}:</strong></p><ul>${rep.warnings.map((w) => `<li>${esc(w)}</li>`).join("")}</ul><p>You can still launch. The mission may fail, and the report will show why.</p></div>` : ""}
+   ${rep.ready && !rep.warnings.length && rep.cautions.length ? `<ul class="launch-cautions">${rep.cautions.map((w) => `<li>${esc(w)}</li>`).join("")}</ul>` : ""}
+   <p class="launch-actions"><button id="launch-go" ${rep.ready ? "" : "disabled"}>${rep.ready && rep.warnings.length ? "Launch anyway" : "Launch mission"}</button> <a href="#designer"><button type="button" class="secondary">Back to the designer</button></a></p><p id="launch-note" class="launch-note" role="status"></p>
+  </div>`;
+  const preview = createScene(app.querySelector("#launch-scene"));
+  active = { app, scene: preview, timer: 0, done: true };
+  if (rep.ready)
+    app.querySelector("#launch-odds").innerHTML = oddsHtml(
+      runMonteCarlo(
+        r,
+        state.mission,
+        state.data.uncertainty,
+        PREVIEW_RUNS,
+        seed,
+      ),
     );
-    app.querySelector("#launch-odds").innerHTML = oddsHtml(mc);
-  }
-
   app.querySelector("#launch-go").addEventListener("click", async () => {
     const note = app.querySelector("#launch-note");
     try {
-      const mod = await import("../sim/missionRun.js");
-      if (typeof mod.createMissionRun !== "function")
-        throw new Error("missing export");
-      note.textContent =
-        "Mission engine found. The flight view is the next piece to build.";
-    } catch {
-      note.textContent =
-        "The mission engine is not connected yet, so the flight cannot start.";
+      const [{ createMissionRun }, { renderHud }] = await Promise.all([
+        import("../sim/missionRun.js"),
+        import("./hud.js"),
+      ]);
+      const run = createMissionRun({
+        r,
+        mission: state.mission,
+        data: state.data,
+        seed,
+      });
+      setState({ run });
+      destroyScene(preview);
+      app.innerHTML = flightMarkup();
+      active = {
+        app,
+        run,
+        scene: createScene(app.querySelector("#launch-flight-scene")),
+        beats: [],
+        timer: 0,
+        paused: false,
+        double: false,
+        waiting: false,
+        done: false,
+        renderHud,
+      };
+      renderHud(document.getElementById("flight-hud"), run.snapshot());
+      app.querySelector("#flight-pause").addEventListener("click", (e) => {
+        if (!active) return;
+        active.paused = !active.paused;
+        e.currentTarget.textContent = active.paused ? "Resume" : "Pause";
+        if (!active.paused && !active.waiting) scheduleBeat(0);
+      });
+      app.querySelector("#flight-speed").addEventListener("click", (e) => {
+        if (!active) return;
+        active.double = !active.double;
+        e.currentTarget.setAttribute("aria-pressed", String(active.double));
+        e.currentTarget.textContent = active.double ? "Speed x1" : "Speed x2";
+      });
+      app.querySelector("#flight-skip").addEventListener("click", () => {
+        if (!active || active.done || active.waiting) return;
+        clearTimeout(active.timer);
+        advanceBeat();
+      });
+      advanceBeat();
+    } catch (error) {
+      note.textContent = `The flight could not start: ${error.message}`;
     }
   });
+  if (!window.__missionForgeLaunchCleanup) {
+    window.__missionForgeLaunchCleanup = true;
+    window.addEventListener("hashchange", () => {
+      if (location.hash !== "#launch") stopPlayback();
+    });
+  }
 }
