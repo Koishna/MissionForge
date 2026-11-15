@@ -1,0 +1,116 @@
+{
+  "decisions": [
+    {
+      "id": "solar-storm-response",
+      "triggerEvent": "solar-storm",
+      "prompt": "A solar storm is affecting spacecraft power. How should the mission respond?",
+      "options": [
+        {
+          "id": "safe-mode",
+          "label": "Enter Safe Mode",
+          "pros": [
+            "Reduces spacecraft power demand",
+            "Improves battery survival margin"
+          ],
+          "cons": ["Reduces science output"],
+          "effect": {
+            "loadScale": 0.8,
+            "scienceScale": 0.5
+          }
+        },
+        {
+          "id": "continue-science",
+          "label": "Continue Science Operations",
+          "pros": [
+            "Preserves science activity",
+            "Maintains higher data production"
+          ],
+          "cons": ["Higher power demand", "Higher battery risk"],
+          "effect": {
+            "loadScale": 1.1,
+            "scienceScale": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "comms-recovery",
+      "triggerEvent": "comms-outage",
+      "prompt": "The communication link has degraded. How should the mission respond?",
+      "options": [
+        {
+          "id": "reduce-contact-demand",
+          "label": "Prioritize Essential Communications",
+          "pros": ["Reduces the impact of the degraded link"],
+          "cons": ["Less science data is successfully delivered"],
+          "effect": {
+            "contactScale": 0.75,
+            "downlinkScale": 0.8
+          }
+        },
+        {
+          "id": "maintain-operations",
+          "label": "Maintain Full Operations",
+          "pros": ["Keeps normal science operations active"],
+          "cons": ["Communication shortfall remains more likely"],
+          "effect": {
+            "contactScale": 0.5,
+            "downlinkScale": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "course-correction",
+      "triggerEvent": "extra-maneuver",
+      "prompt": "Orbit insertion requires additional delta-v. What should the mission do?",
+      "options": [
+        {
+          "id": "conservative-correction",
+          "label": "Use a Conservative Correction",
+          "pros": ["Reduces the additional maneuver requirement"],
+          "cons": ["Leaves less margin for later maneuvers"],
+          "effect": {
+            "deltaVScale": 1.1
+          }
+        },
+        {
+          "id": "full-correction",
+          "label": "Perform the Full Correction",
+          "pros": ["Maximizes the chance of reaching the planned orbit"],
+          "cons": ["Consumes more delta-v"],
+          "effect": {
+            "deltaVScale": 1.25
+          }
+        }
+      ]
+    },
+    {
+      "id": "battery-low",
+      "triggerEvent": "battery-degraded",
+      "prompt": "Battery reserves are falling faster than expected. How should the mission respond?",
+      "options": [
+        {
+          "id": "reduce-load",
+          "label": "Reduce Power Load",
+          "pros": ["Improves battery survival"],
+          "cons": ["Reduces science activity"],
+          "effect": {
+            "loadScale": 0.8,
+            "scienceScale": 0.7
+          }
+        },
+        {
+          "id": "keep-science",
+          "label": "Keep Science Running",
+          "pros": ["Maintains science output"],
+          "cons": ["Consumes battery reserves faster"],
+          "effect": {
+            "loadScale": 1.1,
+            "scienceScale": 1
+          }
+        }
+      ]
+    }
+  ]
+}
