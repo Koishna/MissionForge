@@ -626,3 +626,157 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ---- Member 2: Mission Control HUD, health meters, success gauge, trade-off chips ----
+   Colour is never the only signal: every meter also shows a number and a word. */
+.hud-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem 1.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.hud-phase {
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.hud-clock {
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 0.85rem;
+}
+
+.hud-risk {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.hud-health {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.hud-next {
+  margin-bottom: 0.65rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.hud-health.ok, .meter.ok .m-word { color: var(--ok); }
+.hud-health.low, .meter.low .m-word { color: var(--low); }
+.hud-health.critical, .meter.critical .m-word { color: var(--critical); }
+
+.meters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.6rem 1rem;
+}
+
+.meter {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: baseline;
+  gap: 0 0.5rem;
+  font-size: 0.75rem;
+}
+
+.m-label {
+  color: var(--muted);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.m-num {
+  font-family: ui-monospace, Consolas, monospace;
+  font-weight: 700;
+}
+
+.m-word {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+.mbar {
+  grid-column: 1 / -1;
+  height: 8px;
+  margin-top: 0.3rem;
+  overflow: hidden;
+  border-radius: 5px;
+  background: var(--line);
+}
+
+.mbar > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--ok);
+  transition: width 0.25s ease;
+}
+
+.meter.low .mbar > span { background: var(--low); }
+.meter.critical .mbar > span { background: var(--critical); }
+
+.gauge .g-text strong {
+  font-size: 1.6rem;
+}
+
+.g-text span {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.g-track {
+  position: relative;
+  height: 12px;
+  margin: 0.5rem 0;
+  border-radius: 6px;
+  background: var(--line);
+}
+
+.g-range {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: 6px;
+  background: var(--accent);
+  opacity: 0.35;
+}
+
+.g-mark {
+  position: absolute;
+  top: -3px;
+  width: 4px;
+  height: 18px;
+  margin-left: -2px;
+  border-radius: 2px;
+  background: var(--text);
+}
+
+.g-note {
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.chip {
+  display: inline-block;
+  padding: 0.1rem 0.45rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 0.64rem;
+  line-height: 1.4;
+}
+
+.chip.pro { color: var(--ok); border-color: var(--ok); }
+.chip.con { color: var(--low); border-color: var(--low); }
