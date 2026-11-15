@@ -22,6 +22,12 @@
         "provenance": "ILLUSTRATIVE",
         "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
       },
+      "thermal_rejection_w": {
+        "value": 200,
+        "unit": "W",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with a published spec and cite it in docs/data_sources.md"
+      },
       "pros": [
         "Low-cost spacecraft bus",
         "Low power consumption",

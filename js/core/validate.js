@@ -1,6 +1,6 @@
 import { val } from './units.js';
 import { wetMassKg, powerGeneratedW, powerConsumedW, costUsdM, batteryCapacityWh, eclipseEnergyWh,
-         massMarginFrac, powerMarginFrac, batteryMarginFrac, scienceFrac } from './resources.js';
+         massMarginFrac, powerMarginFrac, batteryMarginFrac, scienceFrac, thermalMarginFrac } from './resources.js';
 import { deltaVms, propellantNeededKg } from './propulsion.js';
 import { linkMarginDb } from './comms.js';
 
@@ -39,6 +39,11 @@ export function validateSpacecraft(r, mission) {
 
   if (costUsdM(r) > mission.requirements.budget_usd_m) warnings.push(`Cost exceeds the budget cap of ${mission.requirements.budget_usd_m} M USD.`);
 
+  const thermal = thermalMarginFrac(r);
+  if (thermal < 0.15) {
+    cautions.push(`THERMAL MARGIN LOW (${(thermal * 100).toFixed(0)}%): the bus may overheat. Reduce power use or choose a bus that rejects more heat.`);
+  }
+
   const link = linkMarginDb(r);
   if (link < 0) warnings.push(`Link margin is ${link.toFixed(1)} dB: data cannot be sent reliably.`);
   else if (link < 3) cautions.push(`Link margin is ${link.toFixed(1)} dB; aim for at least 3 dB.`);
@@ -61,6 +66,7 @@ export function validateSpacecraft(r, mission) {
     batteryMargin: batteryMarginFrac(r),
     scienceFrac: scienceFrac(r),
     linkMarginDb: link,
+    thermalMargin: thermal,
   };
   return { ok: warnings.length === 0, warnings, cautions, locked, metrics };
 }
