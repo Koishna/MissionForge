@@ -1,7 +1,12 @@
 import { ratingFor } from "../js/core/evaluate.js";
 import { evaluateAchievements } from "../js/game/achievements.js";
 import { explainFailure } from "../js/game/failureAnalysis.js";
-import { buildOutcome, starsText } from "../js/ui/resultsBanner.js";
+import {
+  buildOutcome,
+  starsText,
+  scoreForOutcome,
+  FAILED_SCORE_CAP,
+} from "../js/ui/resultsBanner.js";
 import { designSummary, nextSeed } from "../js/ui/retryPanel.js";
 import {
   loadProgress,
@@ -246,6 +251,24 @@ export function runGameTests(data) {
   t(
     "Banner: successful nominal has no failure",
     b3.outcome.success === true && b3.outcome.failure === null,
+  );
+
+  const hi = { score: 94, stars: 5, ratingLabel: "EXCEPTIONAL" };
+  const cf = scoreForOutcome(hi, { success: false });
+  t(
+    "Cap: failed run is capped at 59, 2 stars",
+    cf.score === FAILED_SCORE_CAP && cf.stars === 2 && cf.capped === true,
+  );
+  t(
+    "Cap: successful run keeps its score",
+    scoreForOutcome(hi, { success: true }).score === 94,
+  );
+  t(
+    "Cap: low score on a failed run is not raised",
+    scoreForOutcome(
+      { score: 30, stars: 1, ratingLabel: "POOR" },
+      { success: false },
+    ).score === 30,
   );
   return out;
 }

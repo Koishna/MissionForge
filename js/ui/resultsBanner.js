@@ -1,5 +1,5 @@
 import { setState } from "../state.js";
-import { evaluateMission } from "../core/evaluate.js";
+import { evaluateMission, ratingFor } from "../core/evaluate.js";
 import { explainFailure } from "../game/failureAnalysis.js";
 import { evaluateAchievements } from "../game/achievements.js";
 import { loadProgress, saveProgress, recordAttempt } from "../game/storage.js";
@@ -12,6 +12,24 @@ const esc = (v) =>
     /[&<>"]/g,
     (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c],
   );
+
+export const FAILED_SCORE_CAP = 59;
+
+export function scoreForOutcome(ev, outcome) {
+  if (outcome && !outcome.success && ev.score > FAILED_SCORE_CAP) {
+    return {
+      score: FAILED_SCORE_CAP,
+      ...ratingFor(FAILED_SCORE_CAP),
+      capped: true,
+    };
+  }
+  return {
+    score: ev.score,
+    stars: ev.stars,
+    ratingLabel: ev.ratingLabel,
+    capped: false,
+  };
+}
 
 export function starsText(n) {
   const k = Math.max(0, Math.min(5, n | 0));
@@ -76,11 +94,9 @@ export function renderResultsBanner(container, state) {
 
   const { outcome, fromRun } = built;
   const res = state.results || {};
-  const ev = evaluateMission(
-    res.validation,
-    res.nominal,
-    res.monteCarlo,
-    state.mission,
+  const ev = scoreForOutcome(
+    evaluateMission(res.validation, res.nominal, res.monteCarlo, state.mission),
+    outcome,
   );
   const reliability =
     res.monteCarlo && typeof res.monteCarlo.successRate === "number"
@@ -151,6 +167,7 @@ export function renderResultsBanner(container, state) {
         <span class="results-rating">${esc(ev.ratingLabel)}</span>
         ${newBest ? '<span class="results-new">NEW BEST</span>' : ""}
       </div>
+      ${ev.capped ? `<p class="muted">Score capped at ${FAILED_SCORE_CAP} because the mission failed.</p>` : ""}
       <p class="muted">Best score: ${Math.max(before.best, ev.score)}</p>
       <h3>Achievements</h3>
       ${achievementsHtml}
