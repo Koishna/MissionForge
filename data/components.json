@@ -21,7 +21,20 @@
         "unit": "M USD",
         "provenance": "ILLUSTRATIVE",
         "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
-      }
+      },
+      "thermal_rejection_w": {
+        "value": 200,
+        "unit": "W",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with a published spec and cite it in docs/data_sources.md"
+      },
+      "pros": [
+        "Light and cheap",
+        "Fits the small launcher"
+      ],
+      "cons": [
+        "Only about 200 W of heat can be rejected"
+      ]
     },
     {
       "id": "solar-300",
@@ -44,7 +57,14 @@
         "unit": "M USD",
         "provenance": "ILLUSTRATIVE",
         "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
-      }
+      },
+      "pros": [
+        "Light",
+        "Cheap"
+      ],
+      "cons": [
+        "Little spare power for instruments"
+      ]
     },
     {
       "id": "battery-small",
@@ -67,7 +87,13 @@
         "unit": "M USD",
         "provenance": "ILLUSTRATIVE",
         "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
-      }
+      },
+      "pros": [
+        "Light and cheap"
+      ],
+      "cons": [
+        "Thin eclipse reserve"
+      ]
     },
     {
       "id": "battery-large",
@@ -90,7 +116,13 @@
         "unit": "M USD",
         "provenance": "ILLUSTRATIVE",
         "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
-      }
+      },
+      "pros": [
+        "Largest eclipse reserve"
+      ],
+      "cons": [
+        "Heaviest and most expensive battery"
+      ]
     },
     {
       "id": "comms-xband",
@@ -137,7 +169,13 @@
         "unit": "MHz",
         "provenance": "PUBLISHED",
         "source": "TODO: cite the deep-space X-band downlink allocation (ITU / NASA) with date accessed"
-      }
+      },
+      "pros": [
+        "Good data rate to Earth"
+      ],
+      "cons": [
+        "Draws more power than S-band"
+      ]
     },
     {
       "id": "computer-basic",
@@ -160,7 +198,13 @@
         "unit": "M USD",
         "provenance": "ILLUSTRATIVE",
         "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
-      }
+      },
+      "pros": [
+        "Cheap and low power"
+      ],
+      "cons": [
+        "No spare processing capacity"
+      ]
     },
     {
       "id": "pointing-basic",
@@ -183,7 +227,14 @@
         "unit": "M USD",
         "provenance": "ILLUSTRATIVE",
         "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
-      }
+      },
+      "pros": [
+        "Light",
+        "Low power"
+      ],
+      "cons": [
+        "Limited pointing accuracy"
+      ]
     },
     {
       "id": "prop-biprop",
@@ -218,7 +269,13 @@
         "unit": "M USD",
         "provenance": "ILLUSTRATIVE",
         "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
-      }
+      },
+      "pros": [
+        "Highest delta-v"
+      ],
+      "cons": [
+        "Heavy with propellant"
+      ]
     },
     {
       "id": "comms-sband",
@@ -265,7 +322,14 @@
         "unit": "M USD",
         "provenance": "ILLUSTRATIVE",
         "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
-      }
+      },
+      "pros": [
+        "Light",
+        "Low power draw"
+      ],
+      "cons": [
+        "Low data rate: may miss the data requirement"
+      ]
     },
     {
       "id": "prop-monoprop",
@@ -300,7 +364,128 @@
         "unit": "M USD",
         "provenance": "ILLUSTRATIVE",
         "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
-      }
+      },
+      "pros": [
+        "Lighter and cheaper"
+      ],
+      "cons": [
+        "Lower Isp: less delta-v per kg of propellant"
+      ]
+    },
+    {
+      "id": "battery-medium",
+      "name": "Battery 150 Wh",
+      "category": "battery",
+      "mass_kg": {
+        "value": 12,
+        "unit": "kg",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with a published spec and cite it in docs/data_sources.md"
+      },
+      "capacity_wh": {
+        "value": 150,
+        "unit": "Wh",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with a published spec and cite it in docs/data_sources.md"
+      },
+      "cost_usd_m": {
+        "value": 3,
+        "unit": "M USD",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with a published spec and cite it in docs/data_sources.md"
+      },
+      "pros": [
+        "Comfortable eclipse reserve"
+      ],
+      "cons": [
+        "Adds mass and cost"
+      ]
+    },
+    {
+      "id": "solar-450",
+      "name": "Solar array 450 W",
+      "category": "power",
+      "mass_kg": {
+        "value": 24,
+        "unit": "kg",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with a published spec and cite it in docs/data_sources.md"
+      },
+      "power_generated_w": {
+        "value": 450,
+        "unit": "W",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with a published spec and cite it in docs/data_sources.md"
+      },
+      "cost_usd_m": {
+        "value": 6,
+        "unit": "M USD",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with a published spec and cite it in docs/data_sources.md"
+      },
+      "pros": [
+        "Plenty of power headroom"
+      ],
+      "cons": [
+        "Heavier",
+        "Costs more"
+      ]
+    },
+    {
+      "id": "comms-highgain",
+      "name": "High-gain X-band dish",
+      "category": "comms",
+      "mass_kg": {
+        "value": 51,
+        "unit": "kg",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with a published spec and cite it in docs/data_sources.md"
+      },
+      "power_w": {
+        "value": 45,
+        "unit": "W",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with a published spec and cite it in docs/data_sources.md"
+      },
+      "downlink_kbps": {
+        "value": 8000,
+        "unit": "kbit/s",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with a published spec and cite it in docs/data_sources.md"
+      },
+      "cost_usd_m": {
+        "value": 12,
+        "unit": "M USD",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with a published spec and cite it in docs/data_sources.md"
+      },
+      "rf_power_w": {
+        "value": 20,
+        "unit": "W",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with a published spec and cite it in docs/data_sources.md"
+      },
+      "antenna_gain_dbi": {
+        "value": 35,
+        "unit": "dBi",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with a published spec and cite it in docs/data_sources.md"
+      },
+      "frequency_mhz": {
+        "value": 8450,
+        "unit": "MHz",
+        "provenance": "PUBLISHED",
+        "source": "TODO: cite the deep-space X-band downlink allocation (ITU / NASA) with date accessed"
+      },
+      "pros": [
+        "Much higher data rate",
+        "Strong link margin"
+      ],
+      "cons": [
+        "Adds about 45 kg",
+        "Costs about 8 M USD more",
+        "Draws more power"
+      ]
     }
   ],
   "instruments": [
@@ -331,7 +516,13 @@
         "provenance": "ILLUSTRATIVE",
         "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
       },
-      "science_value": 3
+      "science_value": 3,
+      "pros": [
+        "High science value"
+      ],
+      "cons": [
+        "Generates a lot of data"
+      ]
     },
     {
       "id": "spectrometer",
@@ -360,7 +551,13 @@
         "provenance": "ILLUSTRATIVE",
         "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
       },
-      "science_value": 3
+      "science_value": 3,
+      "pros": [
+        "Adds science value"
+      ],
+      "cons": [
+        "Needs steady power"
+      ]
     },
     {
       "id": "radar",
@@ -389,7 +586,13 @@
         "provenance": "ILLUSTRATIVE",
         "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
       },
-      "science_value": 5
+      "science_value": 5,
+      "pros": [
+        "Highest science value"
+      ],
+      "cons": [
+        "Draws about 220 W"
+      ]
     }
   ],
   "launchers": [
@@ -407,7 +610,13 @@
         "unit": "M USD",
         "provenance": "ILLUSTRATIVE",
         "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
-      }
+      },
+      "pros": [
+        "Cheaper launch"
+      ],
+      "cons": [
+        "Limited mass capacity"
+      ]
     },
     {
       "id": "launch-medium",
@@ -423,7 +632,13 @@
         "unit": "M USD",
         "provenance": "ILLUSTRATIVE",
         "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
-      }
+      },
+      "pros": [
+        "More mass capacity"
+      ],
+      "cons": [
+        "Costs more"
+      ]
     }
   ]
 }
