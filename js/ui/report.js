@@ -1,6 +1,7 @@
 import { state } from "../state.js";
 import { resolveSpacecraft } from "../core/resources.js";
 import { deltaVms } from "../core/propulsion.js";
+import { renderMissionMatch } from "./missionMatch.js";
 
 export function renderReport(app, currentState) {
   const s = currentState || state;
@@ -544,6 +545,12 @@ export function renderReport(app, currentState) {
     </main>
 
   `;
+
+  const matchTarget = app.querySelector(".report-page") || app;
+  const matchBox = document.createElement("section");
+  matchBox.className = "report-section";
+  matchTarget.insertBefore(matchBox, matchTarget.querySelector(":scope > footer"));
+  renderMissionMatch(matchBox, s);
 }
 
 function formatBudget(value) {
