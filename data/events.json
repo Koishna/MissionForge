@@ -4,35 +4,75 @@
     {
       "id": "solar-storm",
       "name": "Solar storm",
-      "effect": { "solarScale": 0.9 },
+      "phase": "transfer",
+      "chance": 0.35,
+      "severity": "high",
+      "headline": "SOLAR STORM DETECTED",
+      "detail": "Increased solar activity is affecting spacecraft power and operating conditions.",
+      "cause": "Elevated solar activity",
+      "effect": {
+        "solarScale": 0.9
+      },
       "response": "Add array margin, or switch off an instrument to cut the load.",
       "provenance": "ILLUSTRATIVE"
     },
     {
       "id": "battery-degraded",
       "name": "Battery ages faster than rated",
-      "effect": { "batteryFadePerMonth": 2 },
+      "phase": "science",
+      "chance": 0.25,
+      "severity": "medium",
+      "headline": "BATTERY DEGRADATION DETECTED",
+      "detail": "Battery capacity is declining faster than expected.",
+      "cause": "Accelerated battery degradation",
+      "effect": {
+        "batteryFadePerMonth": 2
+      },
       "response": "Choose a larger battery, or a shorter-eclipse orbit.",
       "provenance": "ILLUSTRATIVE"
     },
     {
       "id": "comms-outage",
       "name": "Intermittent communication link",
-      "effect": { "contactScale": 0.5 },
+      "phase": "transfer",
+      "chance": 0.3,
+      "severity": "medium",
+      "headline": "COMMS LINK DEGRADED",
+      "detail": "The spacecraft is experiencing intermittent communication with the ground.",
+      "cause": "Temporary communication degradation",
+      "effect": {
+        "contactScale": 0.5
+      },
       "response": "Pick an orbit with more contact time, or a higher data-rate transponder.",
       "provenance": "ILLUSTRATIVE"
     },
     {
       "id": "instrument-overdraw",
       "name": "Instrument draws more power than expected",
-      "effect": { "loadScale": 1.15 },
+      "phase": "science",
+      "chance": 0.3,
+      "severity": "high",
+      "headline": "INSTRUMENT POWER SPIKE",
+      "detail": "A science instrument is consuming more power than expected.",
+      "cause": "Unexpected instrument power demand",
+      "effect": {
+        "loadScale": 1.15
+      },
       "response": "Drop the most power-hungry instrument or add battery and array.",
       "provenance": "ILLUSTRATIVE"
     },
     {
       "id": "extra-maneuver",
       "name": "Orbit entry needs extra delta-v",
-      "effect": { "deltaVScale": 1.2 },
+      "phase": "orbit-insertion",
+      "chance": 0.25,
+      "severity": "high",
+      "headline": "ADDITIONAL MANEUVER REQUIRED",
+      "detail": "Orbit insertion requires more delta-v than originally expected.",
+      "cause": "Unexpected orbital insertion requirement",
+      "effect": {
+        "deltaVScale": 1.2
+      },
       "response": "Carry more propellant, or choose an orbit that is cheaper to enter.",
       "provenance": "ILLUSTRATIVE"
     }
