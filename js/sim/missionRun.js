@@ -1,6 +1,8 @@
 import { mulberry32 } from "../uncertainty/rng.js";
-import { simulateNominal } from "./simulate.js";
+import { simulateNominal } from "./simulate.js?v=health-contract-v1";
 import { applyEffects } from "./events.js";
+import { computeHealth } from "../game/health.js?v=health-contract-v1";
+import { costUsdM, massMarginFrac } from "../core/resources.js";
 import { findDecisionForEvent, applyDecision } from "./decisions.js";
 
 export function createMissionRun({
@@ -150,6 +152,8 @@ export function createMissionRun({
       minBatteryWh: minBattery,
       minBatteryFrac,
       reserveAtEclipseEntry: agedBattery,
+      reserveAtDepletionWh: minBattery <= 0 ? agedBattery : null,
+      reserveAtDepletionFrac: minBattery <= 0 && batteryCapacity > 0 ? agedBattery / batteryCapacity : null,
       depletedAtS: minBattery <= 0 ? Number(orbit.period_s) || 0 : null,
       generatedGb: dataGenerated,
       dataDownlinkedGb,
@@ -206,6 +210,8 @@ export function createMissionRun({
   }
 
   function calculateHealth(sim, healthAssumptions = assumptions) {
+    if (!isSimpleDesign()) return computeHealth(r, mission, sim, null);
+
     const battery = Math.max(0, Math.min(100, (sim.minBatteryFrac ?? 0) * 100));
 
     const dv = Math.max(0, Math.min(100, ((sim.dvMarginFrac ?? 0) + 1) * 50));
@@ -292,6 +298,9 @@ export function createMissionRun({
     const simAfter = isSimpleDesign()
       ? simpleSimulationWithAssumptions(eventAssumptions)
       : simulateNominal(r, mission, eventAssumptions);
+
+    // Keep the event effect for subsequent phases and the final result.
+    assumptions = eventAssumptions;
 
     const healthAfter = calculateHealth(simAfter, eventAssumptions);
 
@@ -489,10 +498,10 @@ export function createMissionRun({
       margins: {
         batteryReserveFrac: sim.minBatteryFrac ?? 0,
         dvMarginFrac: sim.dvMarginFrac ?? 0,
-        linkMarginDb: null,
+        linkMarginDb: Number.isFinite(sim.linkMarginDb) ? sim.linkMarginDb : null,
         dataGb: sim.dataDownlinkedGb ?? 0,
-        massMarginFrac: null,
-        costUsdM: null,
+        massMarginFrac: isSimpleDesign() ? null : massMarginFrac(r),
+        costUsdM: isSimpleDesign() ? null : costUsdM(r),
       },
       failure: sim.success
         ? null
@@ -501,8 +510,16 @@ export function createMissionRun({
             contributingCodes: sim.codes?.slice(1) || [],
             numbers: {
               minBatteryFrac: sim.minBatteryFrac ?? 0,
+              reserveAtEclipseEntry: sim.reserveAtDepletionFrac ?? null,
+              reserveAtEclipseEntryWh: sim.reserveAtDepletionWh ?? null,
+              dvAvailMs: sim.dvAvailMs ?? null,
+              dvNeedMs: sim.dvNeedMs ?? null,
               dvMarginFrac: sim.dvMarginFrac ?? 0,
+              dataGb: sim.dataDownlinkedGb ?? 0,
               dataDownlinkedGb: sim.dataDownlinkedGb ?? 0,
+              minDataGb: mission.requirements?.min_data_gb ?? null,
+              linkMarginDb: Number.isFinite(sim.linkMarginDb) ? sim.linkMarginDb : null,
+              thermalMarginFrac: sim.thermalMarginFrac ?? null,
               depletedAtS: sim.depletedAtS,
             },
           },

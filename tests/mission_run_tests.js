@@ -195,5 +195,29 @@ export async function runMissionRunTests(data) {
     }),
   );
 
+  const forcedEventData = JSON.parse(JSON.stringify(data));
+  forcedEventData.events.events = [{
+    id: "forced-overdraw", phase: "science", chance: 1, severity: "high",
+    headline: "FORCED POWER OVERDRAW", detail: "Test event",
+    effect: { loadScale: 100 }, provenance: "ILLUSTRATIVE",
+  }];
+  forcedEventData.decisions = { decisions: [] };
+  const eventRun = runMission(forcedEventData, 42);
+  results.push(
+    makeResult("Event effects persist into the final mission outcome", () =>
+      eventRun.beats.some((beat) => beat.kind === "event") &&
+      eventRun.run.result().failure?.primaryCode === "BATTERY_DEPLETED",
+    ),
+  );
+  results.push(
+    makeResult("Mission failure exposes numbers for its post-mortem", () => {
+      const result = eventRun.run.result();
+      const n = result.failure?.numbers || {};
+      return Number.isFinite(n.reserveAtEclipseEntry) &&
+        Number.isFinite(n.dvAvailMs) && Number.isFinite(n.dvNeedMs) &&
+        Number.isFinite(n.dataGb) && Number.isFinite(n.minDataGb);
+    }),
+  );
+
   return results;
 }

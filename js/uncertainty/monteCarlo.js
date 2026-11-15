@@ -1,5 +1,7 @@
 import { mulberry32, normal, triangular } from "./rng.js";
 import * as sim from "../sim/simulate.js";
+import { batteryCapacityWh } from "../core/resources.js";
+import { riskLevelFor } from "../game/health.js";
 
 const { simulateNominal } = sim;
 const LABELS = sim.FAILURE_LABELS || {};
@@ -63,6 +65,8 @@ export function runMonteCarlo(r, mission, cfg, runs = 1000, seed = 42) {
 
   const failures = {};
   const mins = [];
+  const minimumBatteryFractions = [];
+  const capacityWh = batteryCapacityWh(r);
 
   for (let i = 0; i < runs; i++) {
     const assumptions = {
@@ -110,7 +114,11 @@ export function runMonteCarlo(r, mission, cfg, runs = 1000, seed = 42) {
 
     const res = simulateNominal(r, mission, assumptions);
 
-    mins.push(Math.max(0, res.minBatteryWh ?? 0));
+    const minimumWh = Math.max(0, res.minBatteryWh ?? 0);
+    mins.push(minimumWh);
+    minimumBatteryFractions.push(
+      capacityWh > 0 ? Math.min(1, minimumWh / capacityWh) : 0,
+    );
 
     if (res.success) {
       ok++;
@@ -138,8 +146,11 @@ export function runMonteCarlo(r, mission, cfg, runs = 1000, seed = 42) {
     (1 + (z * z) / n);
 
   const sorted = [...mins].sort((a, b) => a - b);
+  const sortedFractions = [...minimumBatteryFractions].sort((a, b) => a - b);
 
-  const pct = (q) => sorted[Math.min(n - 1, Math.floor(q * n))];
+  const percentile = (values, q) =>
+    values[Math.min(n - 1, Math.floor(q * n))];
+  const pct = (q) => percentile(sorted, q);
 
   const topFailure =
     Object.entries(failures).sort((a, b) => b[1] - a[1])[0]?.[0] || null;
@@ -148,6 +159,7 @@ export function runMonteCarlo(r, mission, cfg, runs = 1000, seed = 42) {
     runs,
     seed,
     successRate: p,
+    riskLevel: riskLevelFor(p),
 
     ci95: [Math.max(0, centre - half), Math.min(1, centre + half)],
 
@@ -155,10 +167,12 @@ export function runMonteCarlo(r, mission, cfg, runs = 1000, seed = 42) {
     topFailure,
 
     minBatteryPercentiles: {
-      p5: pct(0.05),
-      p50: pct(0.5),
-      p95: pct(0.95),
+      p5: percentile(sortedFractions, 0.05),
+      p50: percentile(sortedFractions, 0.5),
+      p95: percentile(sortedFractions, 0.95),
     },
+
+    minBatteryWhPercentiles: { p5: pct(0.05), p50: pct(0.5), p95: pct(0.95) },
 
     minBatteryWh: mins,
   };

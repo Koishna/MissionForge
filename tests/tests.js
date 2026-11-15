@@ -84,6 +84,11 @@ export function runTests(data) {
     const r = R(base);
     return deltaVms(r) > 0;
   });
+  t("No radio limits the mission downlink to zero", () => {
+    const withoutRadio = { ...base, components: parts.filter((id) => id !== "comms-xband") };
+    const result = simulateNominal(R(withoutRadio), mission);
+    return result.linkMarginDb <= -99 && result.codes.includes("DATA_SHORTFALL");
+  });
   t("Incompatible options are locked, with a reason", () => {
     const d = JSON.parse(JSON.stringify(data));
     d.components.components.find(
@@ -122,6 +127,13 @@ export function runTests(data) {
       runMonteCarlo(R(base, dMid), mission, dMid.uncertainty, 1000, 42)
         .successRate === mcMid.successRate,
   );
+  t("Monte Carlo returns a shared risk band", () =>
+    ["LOW", "MODERATE", "HIGH"].includes(mcMid.riskLevel),
+  );
+  t("Monte Carlo battery percentiles are fractions in order", () => {
+    const p = mcMid.minBatteryPercentiles;
+    return p.p5 >= 0 && p.p5 <= p.p50 && p.p50 <= p.p95 && p.p95 <= 1;
+  });
   t("More battery reserve improves reliability", () => {
     const d = withBatteryWh(minPassWh * 1.5);
     return (

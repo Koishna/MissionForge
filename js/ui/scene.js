@@ -87,6 +87,7 @@ function stars() {
 
 const CRAFT_ART = `
   <g class="sc-craft-art" transform="scale(1.6)">
+    <circle class="sc-craft-marker" r="13"/>
     <rect class="sc-panel" x="-3" y="-17" width="6" height="11" rx="1"/>
     <rect class="sc-panel" x="-3" y="6" width="6" height="11" rx="1"/>
     <rect class="sc-body" x="-8" y="-5" width="15" height="10" rx="2"/>
@@ -142,12 +143,6 @@ function markup() {
       <circle cx="${MOON.x + 16}" cy="${MOON.y - 18}" r="5" fill="#000" opacity="0.12"/>
     </g>
     <circle class="sc-ring" cx="${MOON.x}" cy="${MOON.y}" r="${MOON.ring}"/>
-    <g class="sc-orbiter">
-      <g transform="translate(${MOON.x - MOON.ring} ${MOON.y})">
-        <line class="sc-beam" x1="0" y1="0" x2="${MOON.ring - MOON.r}" y2="0"/>
-        ${CRAFT_ART}
-      </g>
-    </g>
     <line class="sc-link" x1="0" y1="0" x2="0" y2="0"/>
     <g transform="translate(150 253)">
       <g class="sc-rocket">
@@ -158,7 +153,9 @@ function markup() {
         </g>
       </g>
     </g>
-    <g class="sc-craft">${CRAFT_ART}</g>
+    <g class="sc-orbit">
+      <g class="sc-craft" transform="translate(576 104)">${CRAFT_ART}</g>
+    </g>
     <g class="sc-storm">${streaks}</g>
   </g>
   <rect class="sc-frame" x="3" y="3" width="794" height="434" rx="8"/>
@@ -184,6 +181,9 @@ export function createScene(container) {
   root.__scene = {
     path,
     craft: q(".sc-craft"),
+    orbit: q(".sc-orbit"),
+    orbitRaf: 0,
+    orbitStart: 0,
     link: q(".sc-link"),
     label: q(".scene-label"),
     length: path.getTotalLength ? path.getTotalLength() : 0,
@@ -228,6 +228,33 @@ function setStage(root, stage) {
   }
 }
 
+function stopOrbit(root) {
+  const c = root.__scene;
+  if (c.orbitRaf) cancelAnimationFrame(c.orbitRaf);
+  c.orbitRaf = 0;
+}
+
+function startOrbit(root) {
+  const c = root.__scene;
+  stopOrbit(root);
+  if (prefersReducedMotion()) {
+    c.orbit.setAttribute("transform", `rotate(0 ${MOON.x} ${MOON.y})`);
+    return;
+  }
+  c.orbitStart = performance.now();
+  const tick = (now) => {
+    if (root.dataset.stage !== "orbit") return;
+    if (prefersReducedMotion()) {
+      c.orbit.setAttribute("transform", `rotate(0 ${MOON.x} ${MOON.y})`);
+      c.orbitRaf = 0;
+      return;
+    }
+    const degrees = ((now - c.orbitStart) / 12000 * 360) % 360;
+    c.orbit.setAttribute("transform", `rotate(${degrees} ${MOON.x} ${MOON.y})`);
+    c.orbitRaf = requestAnimationFrame(tick);
+  };
+  c.orbitRaf = requestAnimationFrame(tick);
+}
 function moveTo(root, target, ms, done) {
   const c = root.__scene,
     token = ++c.token;
@@ -254,6 +281,7 @@ export function setSceneState(root, name) {
   const state = SCENE_STATES.includes(name) ? name : "idle";
   const c = root.__scene,
     stage = root.dataset.stage || "pad";
+  if (!(state === "orbit" || state === "science" || (state === "success" && stage === "orbit"))) stopOrbit(root);
   root.dataset.state = state;
   c.label.textContent = sceneLabel(state);
   root.setAttribute("role", "img");
@@ -280,12 +308,13 @@ export function setSceneState(root, name) {
       setStage(root, "transit");
       setProgress(root, TRANSIT_STOP);
     }
-    if (stage !== "orbit") moveTo(root, 1, 900, () => setStage(root, "orbit"));
+    if (stage !== "orbit") moveTo(root, 1, 900, () => { setStage(root, "orbit"); startOrbit(root); });
   } else if (state === "orbit" || state === "science") {
     c.token++;
     cancelAnimationFrame(c.raf);
     setProgress(root, 1);
     setStage(root, "orbit");
+    startOrbit(root);
   }
 }
 

@@ -1,8 +1,9 @@
 import { state, setState } from "./state.js";
 import { register, startRouter } from "./router.js";
 import { renderBriefing } from "./ui/briefing.js";
-import { renderDesigner } from "./ui/designer.js";
+import { renderDesigner } from "./ui/designer.js?v=health-contract-v1";
 import { renderValidation } from "./ui/validation.js";
+import { renderLaunch } from "./ui/launch.js?v=health-contract-v1";
 import { renderSimulation } from "./ui/simulation.js";
 import { renderRealityCheck } from "./ui/realityCheck.js";
 import { renderReport } from "./ui/report.js";
@@ -14,6 +15,9 @@ const files = [
   "uncertainty",
   "constants",
   "events",
+  "phases",
+  "decisions",
+  "achievements",
 ];
 
 async function load() {
@@ -32,7 +36,8 @@ load()
     register("briefing", "Briefing", renderBriefing);
     register("designer", "Designer", renderDesigner);
     register("validation", "Validation", renderValidation);
-    register("simulation", "Simulation", renderSimulation);
+    register("launch", "Launch", renderLaunch);
+    register("simulation", "Analysis", renderSimulation);
     register("reality", "Reality Check", renderRealityCheck);
     register("report", "Report", renderReport);
     startRouter(

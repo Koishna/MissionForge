@@ -17,10 +17,16 @@ export function runHealthTests(data) {
   });
   t('health: removing the battery drops power to 0', () => H({ ...base, components: base.components.filter((c) => c !== 'battery-small') }).power === 0);
   t('health: a heavier radio lowers mass margin but raises comms', () => {
-    const light = swap('comms-xband', 'comms-sband'), heavy = base;
+    const light = swap('comms-xband', 'comms-sband');
+    const heavy = swap('comms-xband', 'comms-highgain');
     return massMarginFrac(R(heavy)) < massMarginFrac(R(light)) && H(heavy).comms > H(light).comms;
   });
   t('health: radar overloads the thermal budget', () => H({ ...base, instruments: ['camera','spectrometer','radar'] }).status.thermal === 'critical');
+  t('health: flight thermal score uses simulated thermal margin', () => {
+    const r = R(base);
+    const h = computeHealth(r, mission, { minBatteryFrac: 0.3, dvMarginFrac: 0.2, dataDownlinkedGb: 100, thermalMarginFrac: -0.25 });
+    return h.power === 30 && h.thermal === 37.5 && h.status.thermal === 'critical';
+  });
   t('health: a design that fails validation cannot look healthy', () => H({ ...base, launcherId: null }).overall <= 49);
   t('tradeoffs: the high-gain dish costs about 45 kg and 8 M USD more', () => {
     const e = netEffect(R(base), R(swap('comms-xband', 'comms-highgain')));

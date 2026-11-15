@@ -13,11 +13,11 @@ import { validateSpacecraft } from "../core/validate.js";
 import { deltaVms } from "../core/propulsion.js";
 import { linkMarginDb } from "../core/comms.js";
 import { runMonteCarlo } from "../uncertainty/monteCarlo.js";
-import { createScene, destroyScene, showBeat } from "./scene.js";
-import { setState } from "../state.js";
+import { createScene, destroyScene, showBeat } from "./scene.js?v=moon-orbit-fix5";
+import { state, setState } from "../state.js";
 import { renderEventLog } from "./eventLog.js";
 import { renderDecisionCard } from "./decisionCard.js";
-import { formatMet } from "./hud.js";
+import { formatMet } from "./hud.js?v=health-contract-v1";
 
 const PREVIEW_RUNS = 200;
 
@@ -203,7 +203,13 @@ function advanceBeat() {
     formatMet,
   );
   const status = document.getElementById("flight-status");
-  if (status) status.textContent = `${beat.title}. ${beat.text}`;
+  if (status) {
+    status.textContent = `${beat.title}. ${beat.text}`;
+  }
+  if (beat.kind === "result" || beat.id === "mission-result" || flight.scene.dataset.state === "success" || flight.scene.dataset.state === "failure") {
+    finishFlight(flight);
+    return;
+  }
   if (beat.decision?.options?.length) {
     flight.waiting = true;
     renderDecisionCard(
@@ -227,27 +233,32 @@ function advanceBeat() {
     );
     return;
   }
-  scheduleBeat();
+  scheduleBeat(
+    beat.kind === "phase" && beat.phaseId === "launch" ? 2600 : undefined,
+  );
 }
 function finishFlight(flight) {
-  if (active !== flight || flight.done) return;
   flight.done = true;
   clearTimeout(flight.timer);
   const outcome = flight.run.result();
   setState({ run: null, results: { ...(state.results || {}), outcome } });
   const status = document.getElementById("flight-status");
-  if (status)
-    status.textContent = outcome.success
-      ? "Mission complete."
-      : "Mission failed.";
-  const actions = document.querySelector(".launch-flight .launch-actions");
-  if (actions)
-    actions.innerHTML =
-      '<a href="#report"><button type="button">See results</button></a>';
+  if (status) status.textContent = outcome.success ? "Mission complete." : "Mission failed.";
+  const actions = flight.app.querySelector(".launch-flight .launch-actions");
+  if (!actions) return;
+  actions.innerHTML =
+    '<button type="button" id="flight-replay">Replay mission</button> <a href="\#report" class="launch-result-link">See results</a>';
+  actions.querySelector("#flight-replay").addEventListener("click", () => {
+    const seed = (((Number(flight.seed) || 42) * 1664525 + 1013904223) >>> 0);
+    const replayState = { ...flight.config, seed, run: null, results: { ...(flight.config.results || {}), outcome: null } };
+    setState({ seed, run: null, results: replayState.results });
+    renderLaunch(flight.app, replayState);
+    flight.app.querySelector("#launch-go")?.click();
+  });
 }
 export function renderLaunch(app, state) {
   stopPlayback();
-  ensureCss("css/scene.css");
+  ensureCss("css/scene.css?v=transit-satellite-1");
   ensureCss("css/launch.css");
   ensureCss("css/hud.css");
   const r = resolveSpacecraft(state.spacecraft, state.data);
@@ -279,7 +290,7 @@ export function renderLaunch(app, state) {
     const note = app.querySelector("#launch-note");
     try {
       const [{ createMissionRun }, { renderHud }] = await Promise.all([
-        import("../sim/missionRun.js"),
+        import("../sim/missionRun.js?v=health-contract-v1"),
         import("./hud.js"),
       ]);
       const run = createMissionRun({
@@ -294,6 +305,8 @@ export function renderLaunch(app, state) {
       active = {
         app,
         run,
+        config: state,
+        seed,
         scene: createScene(app.querySelector("#launch-flight-scene")),
         beats: [],
         timer: 0,

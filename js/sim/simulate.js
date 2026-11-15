@@ -5,8 +5,10 @@ import {
   batteryCapacityWh,
   dataRateKbps,
   downlinkRateKbps,
+  thermalRejectionW,
 } from "../core/resources.js";
 import { deltaVms } from "../core/propulsion.js";
+import { linkMarginDb } from "../core/comms.js";
 import { betaAt, eclipseAtBeta } from "./orbital.js";
 
 export const DEFAULT_ASSUMPTIONS = {
@@ -82,14 +84,14 @@ export function simulateNominal(r, mission, assumptions = {}) {
     );
   }
 
-  const thermalLimit = load * 1.5;
+  const thermalLimit = thermalRejectionW(r);
 
   if (thermalLoad > thermalLimit) {
     fail(
       "THERMAL_OVERLOAD",
       `Thermal load ${thermalLoad.toFixed(
         0,
-      )} W exceeds the illustrative safe limit of ${thermalLimit.toFixed(
+      )} W exceeds the selected bus heat-rejection limit of ${thermalLimit.toFixed(
         0,
       )} W.`,
     );
@@ -114,6 +116,7 @@ export function simulateNominal(r, mission, assumptions = {}) {
   let maxEclS = 0;
 
   let reserveAtEclipseEntry = cap0;
+  let reserveAtDepletionWh = null;
 
   const timeline = [];
 
@@ -159,6 +162,7 @@ export function simulateNominal(r, mission, assumptions = {}) {
       depletedAtS = t + eclS;
 
       capAtDepletion = cap;
+      reserveAtDepletionWh = Math.min(reserveAtEclipseEntry, cap);
 
       demandAtDepletion = demandWh;
 
@@ -212,9 +216,16 @@ export function simulateNominal(r, mission, assumptions = {}) {
 
   const contactSPerDay = val(r.orbit.contact_h_per_day) * 3600 * a.contactScale;
 
+  const radioLinkMarginDb = linkMarginDb(r);
+  // Eb/N0 margin is logarithmic; negative margin reduces usable downlink rate.
+  const linkRateScale =
+    radioLinkMarginDb <= -99
+      ? 0
+      : Math.min(1, Math.pow(10, radioLinkMarginDb / 10));
   const downlinkedMax =
     (downlinkRateKbps(r) *
       a.downlinkScale *
+      linkRateScale *
       1000 *
       contactSPerDay *
       (lifetimeS / 86400)) /
@@ -245,6 +256,13 @@ export function simulateNominal(r, mission, assumptions = {}) {
 
     reserveAtEclipseEntry,
 
+    reserveAtDepletionWh,
+
+    reserveAtDepletionFrac:
+      reserveAtDepletionWh !== null && capAtDepletion > 0
+        ? reserveAtDepletionWh / capAtDepletion
+        : null,
+
     depletedAtS: depletedAtS,
 
     generatedGb,
@@ -264,6 +282,10 @@ export function simulateNominal(r, mission, assumptions = {}) {
     dvNeedMs: dvNeed,
 
     dvMarginFrac,
+
+    linkMarginDb: radioLinkMarginDb,
+
+    thermalMarginFrac: thermalLimit > 0 ? (thermalLimit - thermalLoad) / thermalLimit : -1,
 
     timeline,
   };

@@ -214,6 +214,17 @@
   gap: 0.4rem;
 }
 
+.design-provenance {
+  max-width: 58rem;
+  padding: .7rem .85rem;
+  border-left: 3px solid var(--accent);
+  background: rgba(108, 99, 255, .08);
+  color: var(--muted);
+  font-size: .8rem;
+}
+.design-provenance a { color: var(--accent); }
+.estimate-label { color: var(--muted); font-size: .68rem; }
+
 .component-name {
   color: var(--text);
   font-size: 0.82rem;
@@ -672,13 +683,13 @@
 
 .meters {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr));
   gap: 0.6rem 1rem;
 }
 
 .meter {
   display: grid;
-  grid-template-columns: 1fr auto auto;
+  grid-template-columns: minmax(0, 1fr) auto auto;
   align-items: baseline;
   gap: 0 0.5rem;
   font-size: 0.75rem;

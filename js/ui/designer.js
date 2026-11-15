@@ -1,38 +1,63 @@
 import { setState } from "../state.js";
 import { resolveSpacecraft } from "../core/resources.js";
 import { validateSpacecraft } from "../core/validate.js";
+import { simulateNominal } from "../sim/simulate.js?v=health-contract-v1";
 import { runMonteCarlo } from "../uncertainty/monteCarlo.js";
-import { computeHealth, riskLevelFor } from "../game/health.js";
-import { renderHud, designSnapshot } from "./hud.js";
+import { computeHealth, riskLevelFor } from "../game/health.js?v=health-contract-v1";
+import { renderHud, designSnapshot } from "./hud.js?v=health-contract-v1";
 import { renderGauge } from "./gauge.js";
 import { renderDashboard } from "./dashboard.js";
 import { rolePicker, ROLES } from "./team.js";
 
-const CATS = ["bus", "power", "battery", "comms", "computer", "pointing", "propulsion"];
+const CATS = [
+  "bus",
+  "power",
+  "battery",
+  "comms",
+  "computer",
+  "pointing",
+  "propulsion",
+];
 
-// Debounce for the live success probability (Reality Check keeps the 1,000-trial version).
 let probabilityTimer = null;
 
 function getValue(value) {
-  if (value && typeof value === "object" && "value" in value) return value.value;
+  if (value && typeof value === "object" && "value" in value)
+    return value.value;
   return value;
 }
 
 function formatNumber(value, digits = 0) {
   const actualValue = getValue(value);
-  if (actualValue === undefined || actualValue === null || actualValue === "") return null;
+  if (actualValue === undefined || actualValue === null || actualValue === "")
+    return null;
   const number = Number(actualValue);
   return Number.isFinite(number) ? number.toFixed(digits) : null;
 }
 
 function componentSpecs(item) {
   const specs = [];
-  const add = (v, cls, text) => { if (v !== null) specs.push(`<span class="spec-item ${cls}">${text(v)}</span>`); };
+  const add = (v, cls, text) => {
+    if (v !== null)
+      specs.push(`<span class="spec-item ${cls}">${text(v)}</span>`);
+  };
   add(formatNumber(item.mass_kg), "mass-spec", (v) => `⚖ Mass: ${v} kg`);
-  add(formatNumber(item.cost_usd_m, 1), "cost-spec", (v) => `💰 Budget: ${v} M USD`);
+  add(
+    formatNumber(item.cost_usd_m, 1),
+    "cost-spec",
+    (v) => `💰 Budget: ${v} M USD`,
+  );
   add(formatNumber(item.power_w), "power-spec", (v) => `⚡ Consumes: ${v} W`);
-  add(formatNumber(item.power_generated_w), "generation-spec", (v) => `☀ Generates: ${v} W`);
-  add(formatNumber(item.capacity_wh), "battery-spec", (v) => `🔋 Capacity: ${v} Wh`);
+  add(
+    formatNumber(item.power_generated_w),
+    "generation-spec",
+    (v) => `☀ Generates: ${v} W`,
+  );
+  add(
+    formatNumber(item.capacity_wh),
+    "battery-spec",
+    (v) => `🔋 Capacity: ${v} Wh`,
+  );
   add(formatNumber(item.data_rate_kbps), "", (v) => `📡 Data: ${v} kbit/s`);
   add(formatNumber(item.downlink_kbps), "", (v) => `📥 Downlink: ${v} kbit/s`);
   add(formatNumber(item.propellant_kg), "", (v) => `🚀 Propellant: ${v} kg`);
@@ -42,9 +67,15 @@ function componentSpecs(item) {
 
 // Trade-off chips: every part shows what it gives and what it costs. Text plus a +/- sign, never colour alone.
 function tradeoffChips(item) {
-  const pros = (item.pros || []).map((t) => `<span class="chip pro">+ ${t}</span>`);
-  const cons = (item.cons || []).map((t) => `<span class="chip con">- ${t}</span>`);
-  return pros.length || cons.length ? `<span class="chips">${pros.join("")}${cons.join("")}</span>` : "";
+  const pros = (item.pros || []).map(
+    (t) => `<span class="chip pro">+ ${t}</span>`,
+  );
+  const cons = (item.cons || []).map(
+    (t) => `<span class="chip con">- ${t}</span>`,
+  );
+  return pros.length || cons.length
+    ? `<span class="chips">${pros.join("")}${cons.join("")}</span>`
+    : "";
 }
 
 export function renderDesigner(app, currentState) {
@@ -54,8 +85,10 @@ export function renderDesigner(app, currentState) {
   const allowed = ROLES[currentState.role].controls;
   const resolved = resolveSpacecraft(sc, d);
   const check = validateSpacecraft(resolved, currentState.mission);
-  // No nominal run yet in the designer, so health uses the downlink-capacity estimate.
-  const health = computeHealth(resolved, currentState.mission, null, check);
+  const nominal = resolved.orbit
+    ? simulateNominal(resolved, currentState.mission)
+    : null;
+  const health = computeHealth(resolved, currentState.mission, nominal, check);
 
   const updateSpacecraft = (patch) => {
     const newSpacecraft = { ...currentState.spacecraft, ...patch };
@@ -65,19 +98,23 @@ export function renderDesigner(app, currentState) {
 
   const componentBlock = (category) => {
     const categoryAllowed = allowed.includes(category);
-    const components = d.components.components.filter((item) => item.category === category);
+    const components = d.components.components.filter(
+      (item) => item.category === category,
+    );
     return `<div class="category-card">
       <div class="category-title"><h3>${category}</h3>
         ${!categoryAllowed ? `<span class="permission-label">Not assigned</span>` : ""}</div>
-      <div class="component-options">${components.map((component) => {
-        const selected = sc.components.includes(component.id);
-        const disabled = !categoryAllowed && !selected;
-        return `<label class="component-option ${selected ? "selected" : ""} ${disabled ? "disabled" : ""}">
+      <div class="component-options">${components
+        .map((component) => {
+          const selected = sc.components.includes(component.id);
+          const disabled = !categoryAllowed && !selected;
+          return `<label class="component-option ${selected ? "selected" : ""} ${disabled ? "disabled" : ""}">
           <input type="checkbox" class="component-checkbox" data-category="${category}" value="${component.id}" ${selected ? "checked" : ""} ${disabled ? "disabled" : ""}>
           <div class="component-info"><span class="component-name">${component.name}</span>
-            ${componentSpecs(component)}${tradeoffChips(component)}</div>
+            ${componentSpecs(component)}<small class="estimate-label">Illustrative game values · not NASA flight hardware</small>${tradeoffChips(component)}</div>
           ${selected ? `<span class="selected-mark">✓</span>` : ""}</label>`;
-      }).join("")}</div></div>`;
+        })
+        .join("")}</div></div>`;
   };
 
   const instrumentBlock = () => {
@@ -85,17 +122,19 @@ export function renderDesigner(app, currentState) {
     return `<div class="category-card instrument-card">
       <div class="category-title"><h3>Science Instruments</h3>
         <span class="permission-label">${!instrumentsAllowed ? "Not assigned" : "Multiple allowed"}</span></div>
-      <div class="component-options">${d.components.instruments.map((instrument) => {
-        const selected = sc.instruments.includes(instrument.id);
-        const why = check.locked?.[instrument.id];
-        const disabled = !instrumentsAllowed && !selected;
-        return `<label class="component-option instrument-option ${selected ? "selected" : ""} ${disabled ? "disabled" : ""}">
+      <div class="component-options">${d.components.instruments
+        .map((instrument) => {
+          const selected = sc.instruments.includes(instrument.id);
+          const why = check.locked?.[instrument.id];
+          const disabled = !instrumentsAllowed && !selected;
+          return `<label class="component-option instrument-option ${selected ? "selected" : ""} ${disabled ? "disabled" : ""}">
           <input type="checkbox" class="instrument-checkbox" value="${instrument.id}" ${selected ? "checked" : ""} ${disabled ? "disabled" : ""}>
           <div class="component-info"><span class="component-name">${instrument.name}</span>
-            ${componentSpecs(instrument)}${tradeoffChips(instrument)}
+            ${componentSpecs(instrument)}<small class="estimate-label">Illustrative game values · not NASA flight hardware</small>${tradeoffChips(instrument)}
             ${why ? `<small class="locked-message">Warning: ${why}</small>` : ""}</div>
           ${selected ? `<span class="selected-mark">✓</span>` : ""}</label>`;
-      }).join("")}</div></div>`;
+        })
+        .join("")}</div></div>`;
   };
 
   const selectBlock = (id, label, list, currentValue, permissionKey) => {
@@ -116,7 +155,8 @@ export function renderDesigner(app, currentState) {
     <div class="designer-header"><div>
       <span class="screen-kicker">MISSIONFORGE / MISSION CONFIGURATION</span>
       <h2>Spacecraft Designer</h2>
-      <p>Configure your spacecraft by selecting components, science instruments, mission orbit and launch vehicle.</p></div></div>
+      <p>Change the starter design, compare the trade-offs, and see how your choices affect the mission.</p></div></div>
+    <p class="design-provenance">Most spacecraft masses, power levels, batteries, costs, and launcher capacities are illustrative learning-game values, not NASA hardware specifications. <a href="docs/data_sources.md" target="_blank" rel="noopener">See the sources and assumptions</a>.</p>
 
     <div class="panel" id="hud"></div>
     <div class="panel" id="gauge"></div>
@@ -146,21 +186,41 @@ export function renderDesigner(app, currentState) {
   renderDashboard(app.querySelector("#dash"), resolved, currentState.mission);
 
   // HUD first (risk still being estimated), then the live success probability after a short pause.
-  const hud = app.querySelector("#hud"), gauge = app.querySelector("#gauge");
+  const hud = app.querySelector("#hud"),
+    gauge = app.querySelector("#gauge");
   renderHud(hud, designSnapshot(health, "estimating…"));
   if (!resolved.orbit || !resolved.launcher) {
-    gauge.innerHTML = "<p>Choose an orbit and a launch vehicle to see the simulated success probability.</p>";
+    gauge.innerHTML =
+      "<p>Choose an orbit and a launch vehicle to see the simulated success probability.</p>";
   } else {
     gauge.innerHTML = "<p>Estimating success probability…</p>";
     probabilityTimer = setTimeout(() => {
       if (!gauge.isConnected) return; // the player left this screen or the design changed
       try {
-        const mc = runMonteCarlo(resolved, currentState.mission, d.uncertainty, 200, currentState.seed ?? 42);
-        renderGauge(gauge, { value: mc.successRate, low: mc.ci95[0], high: mc.ci95[1], label: "Simulated success (200 trials)" });
-        gauge.insertAdjacentHTML("beforeend", "<p><small>Simulated under stated assumptions, not a real-world flight probability.</small></p>");
-        renderHud(hud, designSnapshot(health, mc.riskLevel || riskLevelFor(mc.successRate)));
+        const mc = runMonteCarlo(
+          resolved,
+          currentState.mission,
+          d.uncertainty,
+          200,
+          currentState.seed ?? 42,
+        );
+        renderGauge(gauge, {
+          value: mc.successRate,
+          low: mc.ci95[0],
+          high: mc.ci95[1],
+          label: "Simulated success (200 trials)",
+        });
+        gauge.insertAdjacentHTML(
+          "beforeend",
+          "<p><small>Simulated under stated assumptions, not a real-world flight probability.</small></p>",
+        );
+        renderHud(
+          hud,
+          designSnapshot(health, mc.riskLevel || riskLevelFor(mc.successRate)),
+        );
       } catch (e) {
-        gauge.innerHTML = "<p>Success probability is not available for this design yet.</p>";
+        gauge.innerHTML =
+          "<p>Success probability is not available for this design yet.</p>";
       }
     }, 300);
   }
@@ -172,7 +232,9 @@ export function renderDesigner(app, currentState) {
       let components = [...currentState.spacecraft.components];
       if (checkbox.checked) {
         components = components.filter((id) => {
-          const component = d.components.components.find((item) => item.id === id);
+          const component = d.components.components.find(
+            (item) => item.id === id,
+          );
           return !component || component.category !== category;
         });
         components.push(componentId);
@@ -197,9 +259,18 @@ export function renderDesigner(app, currentState) {
   });
 
   const orbitSelect = app.querySelector("#orbit");
-  if (orbitSelect) orbitSelect.addEventListener("change", (e) => updateSpacecraft({ orbitId: e.target.value || null }));
+  if (orbitSelect)
+    orbitSelect.addEventListener("change", (e) =>
+      updateSpacecraft({ orbitId: e.target.value || null }),
+    );
   const launcherSelect = app.querySelector("#launcher");
-  if (launcherSelect) launcherSelect.addEventListener("change", (e) => updateSpacecraft({ launcherId: e.target.value || null }));
+  if (launcherSelect)
+    launcherSelect.addEventListener("change", (e) =>
+      updateSpacecraft({ launcherId: e.target.value || null }),
+    );
   const validationButton = app.querySelector("#start-validation-btn");
-  if (validationButton) validationButton.addEventListener("click", () => { window.location.hash = "validation"; });
+  if (validationButton)
+    validationButton.addEventListener("click", () => {
+      window.location.hash = "validation";
+    });
 }

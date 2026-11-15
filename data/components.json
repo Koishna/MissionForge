@@ -8,25 +8,25 @@
         "value": 80,
         "unit": "kg",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Small bus (structure + harness); not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "power_w": {
         "value": 20,
         "unit": "W",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Small bus (structure + harness); not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "cost_usd_m": {
         "value": 20,
         "unit": "M USD",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Small bus (structure + harness); not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "thermal_rejection_w": {
         "value": 200,
         "unit": "W",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with a published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Small bus (structure + harness); not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "pros": [
         "Low-cost spacecraft bus",
@@ -40,6 +40,45 @@
       ]
     },
     {
+      "id": "bus-large",
+      "name": "Large spacecraft bus",
+      "category": "bus",
+      "mass_kg": {
+        "value": 100,
+        "unit": "kg",
+        "provenance": "ILLUSTRATIVE",
+        "source": "MissionForge learning-game estimate; not a NASA flight-hardware specification."
+      },
+      "power_w": {
+        "value": 25,
+        "unit": "W",
+        "provenance": "ILLUSTRATIVE",
+        "source": "MissionForge learning-game estimate; not a NASA flight-hardware specification."
+      },
+      "cost_usd_m": {
+        "value": 30,
+        "unit": "M USD",
+        "provenance": "ILLUSTRATIVE",
+        "source": "MissionForge learning-game estimate; not a NASA flight-hardware specification."
+      },
+      "thermal_rejection_w": {
+        "value": 500,
+        "unit": "W",
+        "provenance": "ILLUSTRATIVE",
+        "source": "MissionForge learning-game estimate; not a NASA flight-hardware specification."
+      },
+      "pros": [
+        "Handles larger payloads and higher heat loads",
+        "Pairs with high-power instruments",
+        "More thermal margin"
+      ],
+      "cons": [
+        "Heavier than the small bus",
+        "Costs more",
+        "Needs a higher-capacity launcher for a full science payload"
+      ]
+    },
+    {
       "id": "solar-300",
       "name": "Solar array 300 W",
       "category": "power",
@@ -47,19 +86,19 @@
         "value": 15,
         "unit": "kg",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Solar array 300 W; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "power_generated_w": {
         "value": 300,
         "unit": "W",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Solar array 300 W; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "cost_usd_m": {
         "value": 5,
         "unit": "M USD",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Solar array 300 W; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "pros": [
         "Provides significant electrical power",
@@ -73,6 +112,72 @@
       ]
     },
     {
+      "id": "solar-600",
+      "name": "Solar array 600 W",
+      "category": "power",
+      "mass_kg": {
+        "value": 20,
+        "unit": "kg",
+        "provenance": "ILLUSTRATIVE",
+        "source": "MissionForge learning-game estimate; not a NASA flight-hardware specification."
+      },
+      "power_generated_w": {
+        "value": 600,
+        "unit": "W",
+        "provenance": "ILLUSTRATIVE",
+        "source": "MissionForge learning-game estimate; not a NASA flight-hardware specification."
+      },
+      "cost_usd_m": {
+        "value": 10,
+        "unit": "M USD",
+        "provenance": "ILLUSTRATIVE",
+        "source": "MissionForge learning-game estimate; not a NASA flight-hardware specification."
+      },
+      "pros": [
+        "Supports power-hungry instruments",
+        "Provides recharge margin during sunlight",
+        "Pairs with larger battery capacity"
+      ],
+      "cons": [
+        "Heavier and more expensive",
+        "Power still falls during eclipse",
+        "Requires suitable pointing"
+      ]
+    },
+    {
+      "id": "solar-800",
+      "name": "Solar array 800 W",
+      "category": "power",
+      "mass_kg": {
+        "value": 25,
+        "unit": "kg",
+        "provenance": "ILLUSTRATIVE",
+        "source": "MissionForge learning-game estimate; not a NASA flight-hardware specification."
+      },
+      "power_generated_w": {
+        "value": 800,
+        "unit": "W",
+        "provenance": "ILLUSTRATIVE",
+        "source": "MissionForge learning-game estimate; not a NASA flight-hardware specification."
+      },
+      "cost_usd_m": {
+        "value": 12,
+        "unit": "M USD",
+        "provenance": "ILLUSTRATIVE",
+        "source": "MissionForge learning-game estimate; not a NASA flight-hardware specification."
+      },
+      "pros": [
+        "Supports multiple high-power instruments",
+        "Leaves margin for eclipse recovery and solar variation",
+        "Suitable for radar-intensive mission plans"
+      ],
+      "cons": [
+        "Heavier and more expensive",
+        "Requires a larger launcher when combined with a heavy payload",
+        "Still needs a battery during eclipse"
+      ]
+    },
+    {
       "id": "battery-small",
       "name": "Battery 100 Wh",
       "category": "battery",
@@ -80,19 +185,19 @@
         "value": 8,
         "unit": "kg",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Battery 100 Wh; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "capacity_wh": {
         "value": 100,
         "unit": "Wh",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Battery 100 Wh; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "cost_usd_m": {
         "value": 2,
         "unit": "M USD",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Battery 100 Wh; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "pros": [
         "Low mass",
@@ -113,19 +218,19 @@
         "value": 14,
         "unit": "kg",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Battery 200 Wh; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "capacity_wh": {
         "value": 200,
         "unit": "Wh",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Battery 200 Wh; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "cost_usd_m": {
         "value": 4,
         "unit": "M USD",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Battery 200 Wh; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "pros": [
         "Higher energy capacity",
@@ -139,6 +244,39 @@
       ]
     },
     {
+      "id": "battery-400",
+      "name": "Battery 400 Wh",
+      "category": "battery",
+      "mass_kg": {
+        "value": 22,
+        "unit": "kg",
+        "provenance": "ILLUSTRATIVE",
+        "source": "MissionForge learning-game estimate; not a NASA flight-hardware specification."
+      },
+      "capacity_wh": {
+        "value": 400,
+        "unit": "Wh",
+        "provenance": "ILLUSTRATIVE",
+        "source": "MissionForge learning-game estimate; not a NASA flight-hardware specification."
+      },
+      "cost_usd_m": {
+        "value": 5,
+        "unit": "M USD",
+        "provenance": "ILLUSTRATIVE",
+        "source": "MissionForge learning-game estimate; not a NASA flight-hardware specification."
+      },
+      "pros": [
+        "More eclipse energy reserve",
+        "Supports higher average spacecraft loads",
+        "Adds margin for battery aging"
+      ],
+      "cons": [
+        "Heavier than the smaller batteries",
+        "Costs more",
+        "Must be recharged by the solar array"
+      ]
+    },
+    {
       "id": "comms-xband",
       "name": "X-band transponder",
       "category": "comms",
@@ -146,43 +284,43 @@
         "value": 6,
         "unit": "kg",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for X-band transponder; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "power_w": {
         "value": 25,
         "unit": "W",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for X-band transponder; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "downlink_kbps": {
         "value": 2000,
         "unit": "kbit/s",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for X-band transponder; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "cost_usd_m": {
         "value": 4,
         "unit": "M USD",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for X-band transponder; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "rf_power_w": {
         "value": 10,
         "unit": "W",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for X-band transponder; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "antenna_gain_dbi": {
         "value": 25,
         "unit": "dBi",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for X-band transponder; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "frequency_mhz": {
-        "value": 8450,
+        "value": 8400,
         "unit": "MHz",
         "provenance": "PUBLISHED",
-        "source": "TODO: cite the deep-space X-band downlink allocation (ITU / NASA) with date accessed"
+        "source": "NASA Small Spacecraft Systems Virtual Institute, Communications State of the Art: representative X-band (8.4 GHz; NASA near-Earth allocation 8025–8400 MHz) value. https://www.nasa.gov/smallsat-institute/sst-soa/soa-communications/ (accessed 15 Nov 2026). Other transponder and antenna performance values are illustrative."
       },
       "pros": [
         "High data rate",
@@ -203,50 +341,54 @@
         "value": 51,
         "unit": "kg",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for High-gain dish; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "power_w": {
         "value": 35,
         "unit": "W",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for High-gain dish; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "downlink_kbps": {
         "value": 5000,
         "unit": "kbit/s",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for High-gain dish; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "cost_usd_m": {
         "value": 12,
         "unit": "M USD",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for High-gain dish; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "rf_power_w": {
         "value": 20,
         "unit": "W",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for High-gain dish; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "antenna_gain_dbi": {
         "value": 38,
         "unit": "dBi",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for High-gain dish; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "frequency_mhz": {
-        "value": 8450,
+        "value": 8400,
         "unit": "MHz",
         "provenance": "PUBLISHED",
-        "source": "TODO: cite the deep-space X-band downlink allocation (ITU / NASA) with date accessed"
+        "source": "NASA Small Spacecraft Systems Virtual Institute, Communications State of the Art: representative X-band (8.4 GHz; NASA near-Earth allocation 8025–8400 MHz) value. https://www.nasa.gov/smallsat-institute/sst-soa/soa-communications/ (accessed 15 Nov 2026). Other transponder and antenna performance values are illustrative."
       },
       "pros": [
         "Very high antenna gain",
         "High communication data rate",
         "Improves deep-space link margin"
       ],
-      "cons": ["Very high mass", "Higher power consumption", "Higher cost"]
+      "cons": [
+        "Very high mass",
+        "Higher power consumption",
+        "Higher cost"
+      ]
     },
     {
       "id": "computer-basic",
@@ -256,21 +398,25 @@
         "value": 3,
         "unit": "kg",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Flight computer; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "power_w": {
         "value": 8,
         "unit": "W",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Flight computer; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "cost_usd_m": {
         "value": 3,
         "unit": "M USD",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Flight computer; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
-      "pros": ["Low mass", "Low power consumption", "Low cost"],
+      "pros": [
+        "Low mass",
+        "Low power consumption",
+        "Low cost"
+      ],
       "cons": [
         "Basic processing capability",
         "Limited redundancy",
@@ -285,19 +431,19 @@
         "value": 5,
         "unit": "kg",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Reaction wheels + star tracker; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "power_w": {
         "value": 10,
         "unit": "W",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Reaction wheels + star tracker; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "cost_usd_m": {
         "value": 3,
         "unit": "M USD",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Reaction wheels + star tracker; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "pros": [
         "Provides accurate spacecraft pointing",
@@ -318,31 +464,31 @@
         "value": 30,
         "unit": "kg",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Bipropellant stage; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "power_w": {
         "value": 5,
         "unit": "W",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Bipropellant stage; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "propellant_kg": {
         "value": 90,
         "unit": "kg",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Bipropellant stage; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "isp_s": {
         "value": 300,
         "unit": "s",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Bipropellant stage; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "cost_usd_m": {
         "value": 6,
         "unit": "M USD",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Bipropellant stage; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "pros": [
         "Higher specific impulse",
@@ -363,45 +509,49 @@
         "value": 3,
         "unit": "kg",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for S-band transmitter (low rate); not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "power_w": {
         "value": 12,
         "unit": "W",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for S-band transmitter (low rate); not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "downlink_kbps": {
         "value": 256,
         "unit": "kbps",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for S-band transmitter (low rate); not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "rf_power_w": {
         "value": 5,
         "unit": "W",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for S-band transmitter (low rate); not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "antenna_gain_dbi": {
         "value": 8,
         "unit": "dBi",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for S-band transmitter (low rate); not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "frequency_mhz": {
         "value": 2250,
         "unit": "MHz",
         "provenance": "PUBLISHED",
-        "source": "TODO: cite the S-band downlink allocation with date accessed"
+        "source": "NASA Small Spacecraft Systems Virtual Institute, Communications State of the Art: representative S-band (2.25 GHz; NASA near-Earth allocation 2200–2290 MHz) value. https://www.nasa.gov/smallsat-institute/sst-soa/soa-communications/ (accessed 15 Nov 2026). Other transponder and antenna performance values are illustrative."
       },
       "cost_usd_m": {
         "value": 2,
         "unit": "M USD",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for S-band transmitter (low rate); not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
-      "pros": ["Low mass", "Low power consumption", "Low cost"],
+      "pros": [
+        "Low mass",
+        "Low power consumption",
+        "Low cost"
+      ],
       "cons": [
         "Low data rate",
         "Lower antenna gain",
@@ -416,33 +566,37 @@
         "value": 22,
         "unit": "kg",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Monopropellant thruster; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "power_w": {
         "value": 4,
         "unit": "W",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Monopropellant thruster; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "propellant_kg": {
         "value": 70,
         "unit": "kg",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Monopropellant thruster; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "isp_s": {
         "value": 220,
         "unit": "s",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Monopropellant thruster; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "cost_usd_m": {
         "value": 4,
         "unit": "M USD",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Monopropellant thruster; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
-      "pros": ["Lower dry mass", "Lower cost", "Simple propulsion option"],
+      "pros": [
+        "Lower dry mass",
+        "Lower cost",
+        "Simple propulsion option"
+      ],
       "cons": [
         "Lower specific impulse",
         "Lower delta-v efficiency",
@@ -458,25 +612,25 @@
         "value": 12,
         "unit": "kg",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Narrow-angle camera; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "power_w": {
         "value": 30,
         "unit": "W",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Narrow-angle camera; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "data_rate_kbps": {
         "value": 500,
         "unit": "kbit/s",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Narrow-angle camera; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "cost_usd_m": {
         "value": 12,
         "unit": "M USD",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Narrow-angle camera; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "science_value": 3,
       "pros": [
@@ -484,7 +638,11 @@
         "Moderate science value",
         "Useful for surface observation"
       ],
-      "cons": ["Consumes power", "Adds mass", "Generates significant data"]
+      "cons": [
+        "Consumes power",
+        "Adds mass",
+        "Generates significant data"
+      ]
     },
     {
       "id": "spectrometer",
@@ -493,25 +651,25 @@
         "value": 8,
         "unit": "kg",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Neutron spectrometer; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "power_w": {
         "value": 20,
         "unit": "W",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Neutron spectrometer; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "data_rate_kbps": {
         "value": 100,
         "unit": "kbit/s",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Neutron spectrometer; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "cost_usd_m": {
         "value": 10,
         "unit": "M USD",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Neutron spectrometer; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "science_value": 3,
       "pros": [
@@ -532,25 +690,25 @@
         "value": 25,
         "unit": "kg",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Imaging radar; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "power_w": {
         "value": 220,
         "unit": "W",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Imaging radar; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "data_rate_kbps": {
         "value": 3000,
         "unit": "kbit/s",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Imaging radar; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "cost_usd_m": {
         "value": 25,
         "unit": "M USD",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Imaging radar; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "science_value": 5,
       "pros": [
@@ -573,13 +731,13 @@
         "value": 300,
         "unit": "kg",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Small launcher; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "cost_usd_m": {
         "value": 40,
         "unit": "M USD",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Small launcher; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "pros": [
         "Lower launch cost",
@@ -599,13 +757,13 @@
         "value": 800,
         "unit": "kg",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Medium launcher; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "cost_usd_m": {
         "value": 70,
         "unit": "M USD",
         "provenance": "ILLUSTRATIVE",
-        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+        "source": "MissionForge learning-game estimate for Medium launcher; not copied from NASA flight hardware. Used to teach relative design trade-offs."
       },
       "pros": [
         "High payload capacity",

@@ -3,7 +3,7 @@ import {
   powerMarginFrac,
   batteryMarginFrac,
   scienceFrac,
-  powerConsumedW,
+  thermalMarginFrac,
 } from "../core/resources.js";
 import { linkMarginDb } from "../core/comms.js";
 import { deltaVms } from "../core/propulsion.js";
@@ -20,76 +20,27 @@ function marginHealth(margin, target = 1) {
   return clamp(((margin + target) / (2 * target)) * 100);
 }
 
-function thermalHealth(r) {
-  const totalPower = powerConsumedW(r);
-
-  const warningLimit = 200;
-  const criticalLimit = 300;
-
-  if (totalPower >= criticalLimit) {
-    return {
-      score: 0,
-      status: "critical",
-      powerW: totalPower,
-    };
-  }
-
-  if (totalPower <= warningLimit) {
-    return {
-      score: 100,
-      status: "nominal",
-      powerW: totalPower,
-    };
-  }
-
-  const score =
-    ((criticalLimit - totalPower) / (criticalLimit - warningLimit)) * 100;
-
+function thermalHealth(r, simulation = null) {
+  const margin =
+    simulation && Number.isFinite(simulation.thermalMarginFrac)
+      ? simulation.thermalMarginFrac
+      : thermalMarginFrac(r);
   return {
-    score: clamp(score),
-    status: "warning",
-    powerW: totalPower,
+    score: marginHealth(margin),
+    status: margin < 0 ? "critical" : margin < 0.15 ? "warning" : "nominal",
+    marginFrac: margin,
   };
 }
 
 function communicationsHealth(r) {
   const margin = linkMarginDb(r);
-
-  if (margin <= -99 || !Number.isFinite(margin)) {
-    return 0;
-  }
-
-  const radio = r.parts.find(
-    (p) => p.rf_power_w && p.antenna_gain_dbi && p.frequency_mhz,
-  );
-
-  if (!radio) {
-    return 0;
-  }
-
-  const rfPower =
-    Number(radio.rf_power_w?.value) || Number(radio.rf_power_w) || 0;
-
-  const antennaGain =
-    Number(radio.antenna_gain_dbi?.value) ||
-    Number(radio.antenna_gain_dbi) ||
-    0;
-
-  const downlink = r.parts.reduce(
-    (sum, p) =>
-      sum + (Number(p.downlink_kbps?.value) || Number(p.downlink_kbps) || 0),
-    0,
-  );
-
-  const marginScore = clamp(((margin + 10) / 20) * 100);
-
-  const capabilityScore = clamp(
-    (rfPower / 10) * 30 + (antennaGain / 25) * 30 + (downlink / 2000) * 40,
-  );
-
-  return clamp(marginScore * 0.5 + capabilityScore * 0.5);
+  return margin <= -99 || !Number.isFinite(margin)
+    ? 0
+    : clamp(((margin + 10) / 50) * 100);
 }
 
+// HUD scores: power is lowest battery fraction, fuel is delta-v reserve, comms is link margin,
+// thermal is bus heat-rejection margin, and science is instrument value adjusted by delivered data.
 export function computeHealth(
   r,
   mission,
@@ -98,7 +49,12 @@ export function computeHealth(
 ) {
   const powerMargin = powerMarginFrac(r);
 
-  let power = Number.isFinite(powerMargin) ? clamp((powerMargin + 1) * 50) : 0;
+  let power =
+    simulation && Number.isFinite(simulation.minBatteryFrac)
+      ? clamp(simulation.minBatteryFrac * 100)
+      : Number.isFinite(powerMargin)
+        ? clamp((powerMargin + 1) * 50)
+        : 0;
 
   const hasBattery = r.parts.some(
     (part) =>
@@ -124,18 +80,24 @@ export function computeHealth(
     if (requiredDv <= 0) {
       fuel = availableDv > 0 ? 100 : 0;
     } else {
-      fuel = clamp((availableDv / requiredDv) * 100);
+      fuel = clamp((availableDv / requiredDv) * 50);
     }
   }
 
   const comms = communicationsHealth(r);
 
-  const thermalResult = thermalHealth(r);
+  const thermalResult = thermalHealth(r, simulation);
   const thermal = thermalResult.score;
 
   const scienceValue = scienceFrac(r);
-
-  const science = Number.isFinite(scienceValue) ? clamp(scienceValue * 100) : 0;
+  const requiredData = Number(mission?.requirements?.min_data_gb) || 0;
+  const dataFraction =
+    simulation && requiredData > 0 && Number.isFinite(simulation.dataDownlinkedGb)
+      ? Math.max(0, Math.min(1, simulation.dataDownlinkedGb / requiredData))
+      : 1;
+  const science = Number.isFinite(scienceValue)
+    ? clamp(scienceValue * dataFraction * 100)
+    : 0;
 
   const massMargin = massMarginFrac(r);
 
@@ -184,9 +146,16 @@ export function computeHealth(
     details: {
       mass,
       battery,
-      thermalPowerW: thermalResult.powerW,
+      thermalMarginFrac: thermalResult.marginFrac,
       linkMarginDb: linkMarginDb(r),
       deltaVms: deltaVms(r),
     },
   };
+}
+
+// Shared risk bands for the Designer's Monte Carlo estimate.
+export function riskLevelFor(successRate) {
+  const rate = Number(successRate);
+  if (!Number.isFinite(rate)) return "UNKNOWN";
+  return rate >= 0.8 ? "LOW" : rate >= 0.55 ? "MODERATE" : "HIGH";
 }

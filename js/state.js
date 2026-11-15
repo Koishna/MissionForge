@@ -7,17 +7,17 @@ export const state = {
     objective: "Lunar polar reconnaissance",
 
     requirements: {
-      budget_usd_m: 150,
+      budget_usd_m: 200,
       lifetime_months: 6,
       min_data_gb: 200,
     },
   },
 
   spacecraft: {
-    components: [],
-    instruments: [],
-    orbitId: null,
-    launcherId: null,
+    components: ["bus-small", "solar-300", "battery-small", "comms-xband", "computer-basic", "pointing-basic", "prop-biprop"],
+    instruments: ["camera", "spectrometer"],
+    orbitId: "llo-100-polar",
+    launcherId: "launch-small",
   },
 
   results: {
@@ -25,7 +25,13 @@ export const state = {
     nominal: null,
     monteCarlo: null,
     report: null,
+    outcome: null,
   },
+
+  // Game layer (Stage 0)
+  run: null,
+  seed: 42,
+  attempts: [],
 };
 
 const listeners = new Set();

@@ -16,8 +16,8 @@
 .hud-clock{font-family:ui-monospace,Consolas,monospace}
 .hud-health.ok,.m-word,.meter.ok .m-word{color:var(--ok)} .hud-health.low,.meter.low .m-word{color:var(--low)} .hud-health.critical,.meter.critical .m-word{color:var(--critical)}
 .hud-next{color:var(--muted);font-size:.9rem;margin-bottom:.5rem}
-.meters{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.5rem 1rem}
-.meter{display:grid;grid-template-columns:1fr auto auto;gap:0 .5rem;align-items:baseline}
+.meters{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr));gap:.5rem 1rem}
+.meter{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:0 .5rem;align-items:baseline}
 .m-num{font-family:ui-monospace,Consolas,monospace}.m-word{font-size:.75rem;font-weight:600}
 .mbar{grid-column:1/-1;height:8px;background:var(--line);border-radius:4px;overflow:hidden}
 .mbar>span{display:block;height:100%;background:var(--ok)}
