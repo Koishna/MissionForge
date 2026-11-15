@@ -1,0 +1,49 @@
+{
+  "phases": [
+    {
+      "id": "launch",
+      "name": "Launch",
+      "order": 1,
+      "startSeconds": 0,
+      "typicalDurationSeconds": 600,
+      "description": "The launch vehicle begins the mission and carries the spacecraft toward its planned trajectory.",
+      "provenance": "ILLUSTRATIVE"
+    },
+    {
+      "id": "separation",
+      "name": "Separation",
+      "order": 2,
+      "startSeconds": 600,
+      "typicalDurationSeconds": 900,
+      "description": "The spacecraft separates from the launch vehicle and begins operating independently.",
+      "provenance": "ILLUSTRATIVE"
+    },
+    {
+      "id": "transfer",
+      "name": "Transfer",
+      "order": 3,
+      "startSeconds": 1500,
+      "typicalDurationSeconds": 3600,
+      "description": "The spacecraft performs its transfer toward the target mission orbit.",
+      "provenance": "ILLUSTRATIVE"
+    },
+    {
+      "id": "orbit-insertion",
+      "name": "Orbit Insertion",
+      "order": 4,
+      "startSeconds": 5100,
+      "typicalDurationSeconds": 1800,
+      "description": "The spacecraft performs the maneuver required to enter the planned orbit.",
+      "provenance": "ILLUSTRATIVE"
+    },
+    {
+      "id": "science",
+      "name": "Science",
+      "order": 5,
+      "startSeconds": 6900,
+      "typicalDurationSeconds": 86400,
+      "description": "The spacecraft operates its instruments and collects science data.",
+      "provenance": "ILLUSTRATIVE"
+    }
+  ]
+}
