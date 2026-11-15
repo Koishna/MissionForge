@@ -1,6 +1,7 @@
 import { ratingFor } from "../js/core/evaluate.js";
 import { evaluateAchievements } from "../js/game/achievements.js";
 import { explainFailure } from "../js/game/failureAnalysis.js";
+import { buildOutcome, starsText } from "../js/ui/resultsBanner.js";
 import { designSummary, nextSeed } from "../js/ui/retryPanel.js";
 import {
   loadProgress,
@@ -203,6 +204,48 @@ export function runGameTests(data) {
       const seq = [41 / 1000000, 0.5];
       return nextSeed(42, () => seq.shift()) === 500001;
     })(),
+  );
+
+  t(
+    "Banner: stars text",
+    starsText(3) === "\u2605\u2605\u2605\u2606\u2606" &&
+      starsText(9) === "\u2605".repeat(5),
+  );
+  t("Banner: nothing flown gives null", buildOutcome({ results: {} }) === null);
+  const real = good();
+  const b1 = buildOutcome({ results: { outcome: real } });
+  t(
+    "Banner: real outcome is passed through",
+    b1.outcome === real && b1.fromRun === true,
+  );
+  const nomFail = {
+    success: false,
+    codes: ["DELTAV_SHORT", "DATA_SHORTFALL"],
+    dvAvailMs: 900,
+    dvNeedMs: 1200,
+    dataDownlinkedGb: 50,
+  };
+  const b2 = buildOutcome({
+    mission: { requirements: { min_data_gb: 200 } },
+    results: { nominal: nomFail, validation: { metrics: { linkMarginDb: 2 } } },
+  });
+  t(
+    "Banner: failed nominal gives primary and contributing codes",
+    b2.fromRun === false &&
+      b2.outcome.failure.primaryCode === "DELTAV_SHORT" &&
+      b2.outcome.failure.contributingCodes[0] === "DATA_SHORTFALL",
+  );
+  t(
+    "Banner: nominal failure carries the player's numbers",
+    b2.outcome.failure.numbers.dvNeedMs === 1200 &&
+      b2.outcome.failure.numbers.minDataGb === 200,
+  );
+  const b3 = buildOutcome({
+    results: { nominal: { success: true, codes: [] } },
+  });
+  t(
+    "Banner: successful nominal has no failure",
+    b3.outcome.success === true && b3.outcome.failure === null,
   );
   return out;
 }
