@@ -1,6 +1,12 @@
 import { ratingFor } from "../js/core/evaluate.js";
 import { evaluateAchievements } from "../js/game/achievements.js";
 import { explainFailure } from "../js/game/failureAnalysis.js";
+import {
+  loadProgress,
+  saveProgress,
+  recordAttempt,
+  useStorage,
+} from "../js/game/storage.js";
 
 const CODES = [
   "NO_ORBIT",
@@ -102,5 +108,70 @@ export function runGameTests(data) {
     "Successful run gives empty explanation",
     explainFailure(good()).sentence === "",
   );
+
+  const mem = () => {
+    const d = {};
+    return {
+      getItem: (k) => (k in d ? d[k] : null),
+      setItem: (k, v) => {
+        d[k] = v;
+      },
+    };
+  };
+  const blocked = {
+    getItem() {
+      throw new Error("blocked");
+    },
+    setItem() {
+      throw new Error("blocked");
+    },
+  };
+  useStorage(mem());
+  t(
+    "Storage: empty store gives defaults",
+    loadProgress().best === 0 && loadProgress().attempts.length === 0,
+  );
+  const p1 = recordAttempt(
+    loadProgress(),
+    {
+      designSummary: { massKg: 100 },
+      score: 70,
+      success: true,
+      seed: 42,
+      at: 1,
+    },
+    ["survivor"],
+  );
+  t("Storage: save returns true", saveProgress(p1) === true);
+  const back = loadProgress();
+  t(
+    "Storage: round trip keeps best, achievements, last design",
+    back.best === 70 &&
+      back.achievements[0] === "survivor" &&
+      back.lastDesign.massKg === 100,
+  );
+  const p2 = recordAttempt(
+    back,
+    { designSummary: null, score: 50, success: false, seed: 7, at: 2 },
+    ["survivor", "lightweight"],
+  );
+  t(
+    "Storage: best never goes down, achievements merge without duplicates",
+    p2.best === 70 && p2.achievements.length === 2 && p2.attempts.length === 2,
+  );
+  let many = loadProgress();
+  for (let i = 0; i < 30; i++)
+    many = recordAttempt(many, { score: i, success: true, seed: i, at: i });
+  t("Storage: attempts capped at 20", many.attempts.length === 20);
+  useStorage(blocked);
+  t(
+    "Storage: blocked storage does not throw",
+    loadProgress().best === 0 && saveProgress(p1) === false,
+  );
+  const corrupt = mem();
+  corrupt.setItem("missionforge.progress.v1", "{not json");
+  useStorage(corrupt);
+  t("Storage: corrupt data gives defaults", loadProgress().best === 0);
+  useStorage(undefined);
   return out;
 }
