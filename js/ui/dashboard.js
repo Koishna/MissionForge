@@ -6,10 +6,23 @@ import {
   costUsdM,
 } from "../core/resources.js";
 
+const WORD = { ok: "OK", low: "LOW", critical: "CRITICAL" };
+
+// Over the limit (or no limit chosen yet) is critical, above 90% of the limit is low.
+const statusFor = (used, limit) =>
+  limit <= 0 || used > limit ? "critical" : used > 0.9 * limit ? "low" : "ok";
+
 function bar(label, used, limit, unit) {
   const pct = limit > 0 ? Math.min(100, (used / limit) * 100) : 0;
+  const s = statusFor(used, limit);
 
-  const status = used > limit ? "OVER LIMIT" : `${pct.toFixed(0)}%`;
+  // Colour is never the only signal: every bar also says OK / LOW / CRITICAL in words.
+  const text =
+    limit <= 0
+      ? "CRITICAL · NOT SET"
+      : used > limit
+        ? "CRITICAL · OVER LIMIT"
+        : `${WORD[s]} · ${pct.toFixed(0)}%`;
 
   return `
     <div class="resource-item">
@@ -26,8 +39,8 @@ function bar(label, used, limit, unit) {
         <span style="width:${pct}%"></span>
       </div>
 
-      <div class="resource-status ${used > limit ? "danger" : ""}">
-        ${status}
+      <div class="resource-status ${s} ${s === "critical" ? "danger" : ""}">
+        ${text}
       </div>
 
     </div>
@@ -42,6 +55,23 @@ export function renderDashboard(container, r, mission) {
   const powerGenerated = powerGeneratedW(r);
   const budgetUsed = costUsdM(r);
   const budgetLimit = mission.requirements.budget_usd_m;
+
+  // The header status follows the worst of the three bars instead of always saying nominal.
+  const states = [
+    statusFor(mass, cap),
+    statusFor(powerUsed, powerGenerated),
+    statusFor(budgetUsed, budgetLimit),
+  ];
+  const worst = states.includes("critical")
+    ? "critical"
+    : states.includes("low")
+      ? "low"
+      : "ok";
+  const headline = {
+    ok: "SYSTEM NOMINAL",
+    low: "MARGINS LOW",
+    critical: "ATTENTION REQUIRED",
+  }[worst];
 
   container.innerHTML = `
 
@@ -59,9 +89,9 @@ export function renderDashboard(container, r, mission) {
           </p>
         </div>
 
-        <div class="system-status">
+        <div class="system-status ${worst}">
           <span class="status-dot"></span>
-          SYSTEM NOMINAL
+          ${headline}
         </div>
 
       </div>
