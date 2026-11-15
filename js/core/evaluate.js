@@ -2,6 +2,20 @@ import { clamp01 } from "./units.js";
 
 const FULL_MARGIN = 0.3;
 
+export const RATING_BANDS = [
+  [90, 5, "EXCEPTIONAL"],
+  [75, 4, "EXCELLENT"],
+  [60, 3, "GOOD"],
+  [40, 2, "MARGINAL"],
+  [0, 1, "POOR"],
+];
+
+export function ratingFor(score) {
+  const [, stars, ratingLabel] =
+    RATING_BANDS.find(([min]) => score >= min) || RATING_BANDS.at(-1);
+  return { stars, ratingLabel };
+}
+
 export function evaluateMission(validation, nominal, monteCarlo, mission) {
   const m = (validation && validation.metrics) || {};
   const minData = mission.requirements.min_data_gb;
@@ -42,5 +56,5 @@ export function evaluateMission(validation, nominal, monteCarlo, mission) {
     why.push(
       "Resource margins are thin: the weakest of mass, power or battery has under 15% spare.",
     );
-  return { score, parts, why };
+  return { score, parts, why, ...ratingFor(score) };
 }
