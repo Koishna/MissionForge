@@ -45,3 +45,11 @@ export const scienceFrac = (r) => {
   const best = sum(r.allInstruments || [], 'science_value');
   return best > 0 ? sum(r.instruments, 'science_value') / best : 0;
 };
+
+// Thermal: every watt consumed ends up as heat. Margin = (heat the bus can reject - heat produced) / heat it can reject.
+// Returns -1 when no bus gives a rejection figure (nothing can shed heat).
+export function thermalMarginFrac(r) {
+  const rejectW = sum(r.parts, 'thermal_rejection_w');
+  if (rejectW <= 0) return -1;
+  return (rejectW - powerConsumedW(r)) / rejectW;
+}
