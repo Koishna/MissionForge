@@ -204,7 +204,7 @@ export function renderSimulation(app, state) {
         <div><dt>Data to the ground</dt><dd>${res.dataDownlinkedGb.toFixed(0)} GB of ${need} GB needed</dd></div>
         <div><dt>Delta-v</dt><dd>${res.dvAvailMs.toFixed(0)} m/s available, ${res.dvNeedMs.toFixed(0)} m/s needed</dd></div>
       </dl>
-      <p><a href="#reality"><button>Reality Check</button></a></p>`;
+      <p><a href="#launch"><button>Launch mission</button></a> <a href="#reality"><button>Reality Check</button></a></p>`;
   };
 
   app.querySelector("#sim-phase").addEventListener("input", (e) => {

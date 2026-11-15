@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MissionForge tests</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        margin: 2rem auto;
+        max-width: 52rem;
+        padding: 0 1rem;
+        background: #0b1220;
+        color: #e8eefc;
+      }
+      h1 {
+        margin-bottom: 0.25rem;
+      }
+      #summary {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin: 0.75rem 0 1.25rem;
+      }
+      .pass {
+        color: #5fd38d;
+      }
+      .fail {
+        color: #ff6b6b;
+      }
+      ul {
+        list-style: none;
+        padding: 0;
+      }
+      li {
+        padding: 0.25rem 0;
+        border-bottom: 1px solid #22304d;
+      }
+      h2 {
+        margin: 1.5rem 0 0.25rem;
+        font-size: 1.05rem;
+      }
+      code {
+        color: #9db4e8;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>MissionForge tests</h1>
+    <p>
+      Serve the repo folder (for example <code>python -m http.server</code>) and
+      open <code>/tests/test.html</code>. Run before every merge.
+    </p>
+    <div id="summary" role="status">Running…</div>
+    <div id="out"></div>
+    <script type="module">
+      const files = [
+        "components",
+        "orbits",
+        "missions",
+        "uncertainty",
+        "constants",
+        "events",
+        "phases",
+        "decisions",
+        "achievements",
+      ];
+      const out = document.getElementById("out");
+      const summary = document.getElementById("summary");
+      const esc = (s) =>
+        String(s).replace(
+          /[&<>"]/g,
+          (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c],
+        );
+      const suites = [
+        ["Spacecraft engineering (Part 2)", "./_test.js", "runPart2Tests"],
+        ["Orbit and simulation", "./sim_tests.js", "runSimTests"],
+        ["Monte Carlo, scoring and validation", "./tests.js", "runTests"],
+        [
+          "Real-mission comparison",
+          "./mission_match_browser.js",
+          "runMissionMatchTests",
+        ],
+        ["Mission run", "./mission_run_tests.js", "runMissionRunTests"],
+        ["Health and HUD ", "./health_tests.js", "runHealthTests"],
+        ["Launch UI ", "./launch_ui_tests.js", "runLaunchUiTests"],
+        ["Game layer ", "./game_tests.js", "runGameTests"],
+      ];
+      let total = 0,
+        failed = 0;
+      try {
+        const data = {};
+        for (const f of files) {
+          const r = await fetch(`../data/${f}.json`);
+          if (!r.ok) throw new Error(`Could not load data/${f}.json`);
+          data[f] = await r.json();
+        }
+        for (const [title, path, fn] of suites) {
+          let results;
+          try {
+            const mod = await import(path);
+            const raw = await mod[fn](data);
+            results = Array.isArray(raw) ? raw : raw.results;
+          } catch (e) {
+            results = [
+              { name: `suite could not run: ${e.message}`, ok: false },
+            ];
+          }
+          const bad = results.filter((r) => !r.ok);
+          total += results.length;
+          failed += bad.length;
+          out.insertAdjacentHTML(
+            "beforeend",
+            `<h2>${esc(title)}: ${results.length - bad.length}/${results.length}</h2><ul>` +
+              results
+                .map(
+                  (r) =>
+                    `<li class="${r.ok ? "pass" : "fail"}">${r.ok ? "PASS" : "FAIL"} ${esc(r.name)}${r.err ? " (" + esc(r.err) + ")" : ""}</li>`,
+                )
+                .join("") +
+              "</ul>",
+          );
+        }
+        summary.className = failed ? "fail" : "pass";
+        summary.textContent = failed
+          ? `${failed} of ${total} tests FAILED`
+          : `All ${total} tests passed`;
+      } catch (e) {
+        summary.className = "fail";
+        summary.textContent =
+          e.message +
+          ". Serve the folder with a local server; opening this file directly will not load the JSON files.";
+      }
+    </script>
+  </body>
+</html>

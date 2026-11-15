@@ -1,0 +1,134 @@
+/* Retry panel */
+.retry-panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+.retry-panel h3 {
+  margin: 0 0 0.25rem;
+}
+.retry-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: 0.5rem;
+  margin: 0.5rem 0 1rem;
+}
+.retry-summary div {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 0.5rem;
+}
+.retry-summary dt {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+.retry-summary dd {
+  margin: 0;
+  font-weight: 600;
+}
+.retry-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.retry-hint {
+  font-size: 0.85rem;
+  margin-bottom: 0;
+}
+
+/* Results banner */
+.results-banner {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left-width: 6px;
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+}
+.results-banner--ok {
+  border-left-color: var(--measured);
+}
+.results-banner--fail {
+  border-left-color: var(--bad);
+}
+.results-banner--none {
+  border-left-color: var(--muted);
+}
+.results-banner h2 {
+  margin: 0.25rem 0 0.5rem;
+}
+.results-banner--ok h2 {
+  color: var(--measured);
+}
+.results-banner--fail h2 {
+  color: var(--bad);
+}
+.results-kicker {
+  margin: 0;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+.results-score {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+.results-score-num {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+.results-stars {
+  font-size: 1.5rem;
+  letter-spacing: 0.1em;
+  color: var(--illustrative);
+}
+.results-rating {
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+.results-new {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.1rem 0.4rem;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  border-radius: 4px;
+}
+.results-achievements {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0;
+  display: grid;
+  gap: 0.5rem;
+}
+.results-achievements li {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+}
+.results-ach-icon {
+  font-size: 0.75rem;
+  font-weight: 700;
+  min-width: 2.5rem;
+  text-align: center;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 0.2rem;
+}
+.results-postmortem {
+  border: 1px solid var(--bad);
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  margin: 1rem 0;
+}
+.results-postmortem h3 {
+  margin-top: 0;
+}
