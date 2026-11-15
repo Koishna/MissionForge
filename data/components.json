@@ -21,7 +21,17 @@
         "unit": "M USD",
         "provenance": "ILLUSTRATIVE",
         "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
-      }
+      },
+      "pros": [
+        "Low-cost spacecraft bus",
+        "Low power consumption",
+        "Suitable for small missions"
+      ],
+      "cons": [
+        "Limited payload capacity",
+        "Limited power capability",
+        "Less suitable for large instruments"
+      ]
     },
     {
       "id": "solar-300",
@@ -44,7 +54,17 @@
         "unit": "M USD",
         "provenance": "ILLUSTRATIVE",
         "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
-      }
+      },
+      "pros": [
+        "Provides significant electrical power",
+        "Moderate mass",
+        "Supports power-hungry payloads"
+      ],
+      "cons": [
+        "Adds spacecraft mass",
+        "Power generation depends on illumination",
+        "Requires sufficient spacecraft pointing"
+      ]
     },
     {
       "id": "battery-small",
@@ -67,7 +87,17 @@
         "unit": "M USD",
         "provenance": "ILLUSTRATIVE",
         "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
-      }
+      },
+      "pros": [
+        "Low mass",
+        "Low cost",
+        "Provides energy storage during eclipse"
+      ],
+      "cons": [
+        "Limited energy capacity",
+        "May be insufficient for high-power loads",
+        "Lower margin during long eclipses"
+      ]
     },
     {
       "id": "battery-large",
@@ -90,7 +120,17 @@
         "unit": "M USD",
         "provenance": "ILLUSTRATIVE",
         "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
-      }
+      },
+      "pros": [
+        "Higher energy capacity",
+        "Better eclipse endurance",
+        "Provides more power margin"
+      ],
+      "cons": [
+        "Heavier than the small battery",
+        "Higher cost",
+        "Adds more spacecraft mass"
+      ]
     },
     {
       "id": "comms-xband",
@@ -137,7 +177,70 @@
         "unit": "MHz",
         "provenance": "PUBLISHED",
         "source": "TODO: cite the deep-space X-band downlink allocation (ITU / NASA) with date accessed"
-      }
+      },
+      "pros": [
+        "High data rate",
+        "Good deep-space communications capability",
+        "Moderate mass"
+      ],
+      "cons": [
+        "Higher power consumption than S-band",
+        "More expensive than S-band",
+        "Requires suitable ground-station support"
+      ]
+    },
+    {
+      "id": "comms-highgain",
+      "name": "High-gain dish",
+      "category": "comms",
+      "mass_kg": {
+        "value": 51,
+        "unit": "kg",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "power_w": {
+        "value": 35,
+        "unit": "W",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "downlink_kbps": {
+        "value": 5000,
+        "unit": "kbit/s",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "cost_usd_m": {
+        "value": 12,
+        "unit": "M USD",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "rf_power_w": {
+        "value": 20,
+        "unit": "W",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "antenna_gain_dbi": {
+        "value": 38,
+        "unit": "dBi",
+        "provenance": "ILLUSTRATIVE",
+        "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
+      },
+      "frequency_mhz": {
+        "value": 8450,
+        "unit": "MHz",
+        "provenance": "PUBLISHED",
+        "source": "TODO: cite the deep-space X-band downlink allocation (ITU / NASA) with date accessed"
+      },
+      "pros": [
+        "Very high antenna gain",
+        "High communication data rate",
+        "Improves deep-space link margin"
+      ],
+      "cons": ["Very high mass", "Higher power consumption", "Higher cost"]
     },
     {
       "id": "computer-basic",
@@ -160,7 +263,13 @@
         "unit": "M USD",
         "provenance": "ILLUSTRATIVE",
         "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
-      }
+      },
+      "pros": ["Low mass", "Low power consumption", "Low cost"],
+      "cons": [
+        "Basic processing capability",
+        "Limited redundancy",
+        "May not support complex processing loads"
+      ]
     },
     {
       "id": "pointing-basic",
@@ -183,7 +292,17 @@
         "unit": "M USD",
         "provenance": "ILLUSTRATIVE",
         "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
-      }
+      },
+      "pros": [
+        "Provides accurate spacecraft pointing",
+        "Supports instrument operations",
+        "Moderate mass and power"
+      ],
+      "cons": [
+        "Consumes electrical power",
+        "Adds spacecraft mass",
+        "Requires operational management"
+      ]
     },
     {
       "id": "prop-biprop",
@@ -218,7 +337,17 @@
         "unit": "M USD",
         "provenance": "ILLUSTRATIVE",
         "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
-      }
+      },
+      "pros": [
+        "Higher specific impulse",
+        "Good delta-v capability",
+        "Efficient for larger maneuvers"
+      ],
+      "cons": [
+        "Higher dry mass",
+        "More expensive than monopropellant",
+        "Requires more complex propulsion system"
+      ]
     },
     {
       "id": "comms-sband",
@@ -265,7 +394,13 @@
         "unit": "M USD",
         "provenance": "ILLUSTRATIVE",
         "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
-      }
+      },
+      "pros": ["Low mass", "Low power consumption", "Low cost"],
+      "cons": [
+        "Low data rate",
+        "Lower antenna gain",
+        "Lower deep-space link margin"
+      ]
     },
     {
       "id": "prop-monoprop",
@@ -300,7 +435,13 @@
         "unit": "M USD",
         "provenance": "ILLUSTRATIVE",
         "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
-      }
+      },
+      "pros": ["Lower dry mass", "Lower cost", "Simple propulsion option"],
+      "cons": [
+        "Lower specific impulse",
+        "Lower delta-v efficiency",
+        "Less efficient for large maneuvers"
+      ]
     }
   ],
   "instruments": [
@@ -331,7 +472,13 @@
         "provenance": "ILLUSTRATIVE",
         "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
       },
-      "science_value": 3
+      "science_value": 3,
+      "pros": [
+        "Provides high-resolution imaging",
+        "Moderate science value",
+        "Useful for surface observation"
+      ],
+      "cons": ["Consumes power", "Adds mass", "Generates significant data"]
     },
     {
       "id": "spectrometer",
@@ -360,7 +507,17 @@
         "provenance": "ILLUSTRATIVE",
         "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
       },
-      "science_value": 3
+      "science_value": 3,
+      "pros": [
+        "Provides scientific composition data",
+        "Moderate mass",
+        "Low data-rate requirement"
+      ],
+      "cons": [
+        "Consumes electrical power",
+        "Adds mission cost",
+        "Produces less direct visual information"
+      ]
     },
     {
       "id": "radar",
@@ -389,7 +546,17 @@
         "provenance": "ILLUSTRATIVE",
         "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
       },
-      "science_value": 5
+      "science_value": 5,
+      "pros": [
+        "Highest science value",
+        "Works through some lighting limitations",
+        "Provides detailed surface information"
+      ],
+      "cons": [
+        "Very high power consumption",
+        "Higher mass",
+        "High cost and data rate"
+      ]
     }
   ],
   "launchers": [
@@ -407,7 +574,17 @@
         "unit": "M USD",
         "provenance": "ILLUSTRATIVE",
         "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
-      }
+      },
+      "pros": [
+        "Lower launch cost",
+        "Suitable for lightweight spacecraft",
+        "Lower capacity can encourage efficient designs"
+      ],
+      "cons": [
+        "Limited payload capacity",
+        "May not support heavy spacecraft",
+        "Less flexibility for large missions"
+      ]
     },
     {
       "id": "launch-medium",
@@ -423,7 +600,17 @@
         "unit": "M USD",
         "provenance": "ILLUSTRATIVE",
         "source": "TODO: replace with published spec and cite it in docs/data_sources.md"
-      }
+      },
+      "pros": [
+        "High payload capacity",
+        "Supports heavier spacecraft",
+        "Provides more design flexibility"
+      ],
+      "cons": [
+        "Higher launch cost",
+        "May be excessive for small spacecraft",
+        "Increases mission budget"
+      ]
     }
   ]
 }
