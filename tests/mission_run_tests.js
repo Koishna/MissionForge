@@ -284,17 +284,16 @@ export async function runMissionRunTests(data) {
   results.push(
     makeResult("Event effects persist after a decision", () => {
       const testData = makeDecisionData();
+      const { run, beats } = runMission(testData, 42);
 
-      const { run } = runMission(testData, 42);
+      const eventBeat = beats.find((beat) => beat.kind === "event");
+      const pending = run.snapshot().pendingDecision;
 
-      run.step();
-      const eventBeat = run.step();
-
-      if (eventBeat?.kind !== "event") {
+      if (!eventBeat || !pending) {
         return false;
       }
 
-      const choice = run.choose("solar-storm-response", "safe-mode");
+      const choice = run.choose(pending.id, "safe-mode");
 
       return (
         choice.assumptions.solarScale === 0.9 &&
@@ -307,13 +306,16 @@ export async function runMissionRunTests(data) {
   results.push(
     makeResult("Decision effects are applied to the simulation", () => {
       const testData = makeDecisionData();
+      const { run, beats } = runMission(testData, 42);
 
-      const { run } = runMission(testData, 42);
+      const eventBeat = beats.find((beat) => beat.kind === "event");
+      const pending = run.snapshot().pendingDecision;
 
-      run.step();
-      run.step();
+      if (!eventBeat || !pending) {
+        return false;
+      }
 
-      const choice = run.choose("solar-storm-response", "continue-science");
+      const choice = run.choose(pending.id, "continue-science");
 
       return (
         choice.assumptions.solarScale === 0.9 &&
