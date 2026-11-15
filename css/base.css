@@ -10,6 +10,10 @@
   --tool: #7a3fb0;
   --illustrative: #b26a00;
   --bad: #b3261e;
+  /* Health status colours reuse the palette above, so dark mode follows automatically. */
+  --ok: var(--measured);
+  --low: var(--illustrative);
+  --critical: var(--bad);
 }
 @media (prefers-color-scheme: dark) {
   :root {
