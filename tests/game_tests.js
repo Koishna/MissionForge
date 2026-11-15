@@ -1,6 +1,7 @@
 import { ratingFor } from "../js/core/evaluate.js";
 import { evaluateAchievements } from "../js/game/achievements.js";
 import { explainFailure } from "../js/game/failureAnalysis.js";
+import { designSummary, nextSeed } from "../js/ui/retryPanel.js";
 import {
   loadProgress,
   saveProgress,
@@ -173,5 +174,35 @@ export function runGameTests(data) {
   useStorage(corrupt);
   t("Storage: corrupt data gives defaults", loadProgress().best === 0);
   useStorage(undefined);
+
+  const st = {
+    results: {
+      validation: {
+        metrics: {
+          massMargin: 0.25,
+          costUsdM: 92.5,
+          powerMargin: 0.1,
+          linkMarginDb: 3.2,
+        },
+      },
+    },
+  };
+  const rows = designSummary(st);
+  t(
+    "Retry: summary has mass, cost, power, comms rows",
+    rows.length === 4 && rows[1][1] === "92.5 M USD" && rows[0][1] === "25%",
+  );
+  t(
+    "Retry: no validation gives empty summary",
+    designSummary({ results: {} }).length === 0 &&
+      designSummary(null).length === 0,
+  );
+  t(
+    "Retry: new seed always differs from current",
+    (() => {
+      const seq = [41 / 1000000, 0.5];
+      return nextSeed(42, () => seq.shift()) === 500001;
+    })(),
+  );
   return out;
 }
